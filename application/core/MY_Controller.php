@@ -11,6 +11,10 @@ class MY_Controller extends CI_Controller
 		parent::__construct();
 		$this->load->model('M_Users', 'user');
 		$this->load->model('M_Satuan', 'satuan');
+		$this->load->model('M_Barang', 'barang');
+		$this->load->model('M_Supplier', 'supplier');
+		$this->load->model('M_Temp', 'temp');
+		$this->load->model('M_Beli', 'beli');
 	}
 
 	public $parseData = [
@@ -27,5 +31,20 @@ class MY_Controller extends CI_Controller
 		];
 
 		return $message;
+	}
+
+	public function getLastIdBuyItem(){
+		$data = $this->beli->getLastID();
+
+		if($data->row()->id_buy_item != ''){
+			$urutan = substr($data->row()->id_buy_item, -3);
+			$urutan = $urutan + 1;
+			$kode = sprintf("%03d", $urutan);
+			$kode = 'BL'.date('my').$kode;
+		}else{
+			$kode = 'BL'.date('my').'001';
+		}
+
+		return $kode;
 	}
 }

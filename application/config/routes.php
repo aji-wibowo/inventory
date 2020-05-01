@@ -20,10 +20,47 @@ $route['admin/satuan/ajax/delete/(:num)'] = 'AdminController/ajax_delete_satuan/
 
 $route['admin/barang'] = 'AdminController/barang';
 $route['admin/barang/ajax/get/all'] = 'AdminController/ajax_get_all_barang';
-$route['admin/barang/ajax/get/id'] = 'AdminController/ajax_get_by_id';
+$route['admin/barang/ajax/get/id'] = 'AdminController/ajax_get_barang_by_id';
 $route['admin/barang/ajax/save'] = 'AdminController/ajax_save_barang';
-$route['admin/barang/ajax/update/(:num)'] = 'AdminController/ajax_update_barang/$1';
-$route['admin/barang/ajax/delete/(:num)'] = 'AdminController/ajax_delete_barang/$1';
+$route['admin/barang/ajax/update/(:any)'] = 'AdminController/ajax_update_barang/$1';
+$route['admin/barang/ajax/delete/(:any)'] = 'AdminController/ajax_delete_barang/$1';
+
+$route['admin/supplier'] = 'AdminController/supplier';
+$route['admin/supplier/ajax/get/all'] = 'AdminController/ajax_get_all_supplier';
+$route['admin/supplier/ajax/get/id'] = 'AdminController/ajax_get_supplier_by_id';
+$route['admin/supplier/ajax/save'] = 'AdminController/ajax_save_supplier';
+$route['admin/supplier/ajax/update/(:any)'] = 'AdminController/ajax_update_supplier/$1';
+$route['admin/supplier/ajax/delete/(:any)'] = 'AdminController/ajax_delete_supplier/$1';
+
+//staff
+$route['staff'] = 'StaffController/index';
+$route['staff/transaksi/masuk'] = 'StaffController/transaksi_barang_masuk';
+$route['staff/transaksi/keluar'] = 'StaffController/transaksi_barang_keluar';
+$route['staff/transaksi/masuk/insert'] = 'StaffController/ajax_transaksi_barang_masuk_insert';
+$route['staff/transaksi/insert/temporary'] = 'StaffController/ajax_transaksi_insert_temporary';
+$route['staff/transaksi/get/temporary'] = 'StaffController/ajax_transaksi_get_temporary';
+$route['staff/transaksi/delete/temporary'] = 'StaffController/ajax_transaksi_delete_temporary';
+
+$route['staff/satuan'] = 'StaffController/satuan_barang';
+$route['staff/satuan/ajax/get/all'] = 'StaffController/ajax_get_all_satuan';
+$route['staff/satuan/ajax/get/id'] = 'StaffController/ajax_get_by_id';
+$route['staff/satuan/ajax/save'] = 'StaffController/ajax_save_satuan';
+$route['staff/satuan/ajax/update/(:num)'] = 'StaffController/ajax_update_satuan/$1';
+$route['staff/satuan/ajax/delete/(:num)'] = 'StaffController/ajax_delete_satuan/$1';
+
+$route['staff/barang'] = 'StaffController/barang';
+$route['staff/barang/ajax/get/all'] = 'StaffController/ajax_get_all_barang';
+$route['staff/barang/ajax/get/id'] = 'StaffController/ajax_get_barang_by_id';
+$route['staff/barang/ajax/save'] = 'StaffController/ajax_save_barang';
+$route['staff/barang/ajax/update/(:any)'] = 'StaffController/ajax_update_barang/$1';
+$route['staff/barang/ajax/delete/(:any)'] = 'StaffController/ajax_delete_barang/$1';
+
+$route['staff/supplier'] = 'StaffController/supplier';
+$route['staff/supplier/ajax/get/all'] = 'StaffController/ajax_get_all_supplier';
+$route['staff/supplier/ajax/get/id'] = 'StaffController/ajax_get_supplier_by_id';
+$route['staff/supplier/ajax/save'] = 'StaffController/ajax_save_supplier';
+$route['staff/supplier/ajax/update/(:any)'] = 'StaffController/ajax_update_supplier/$1';
+$route['staff/supplier/ajax/delete/(:any)'] = 'StaffController/ajax_delete_supplier/$1';
 
 $route['default_controller'] = 'MappingController';
 $route['404_override'] = '';

@@ -9,14 +9,14 @@ class AdminController extends MY_Controller
 	function __construct()
 	{
 		parent::__construct();
-		if($this->session->userdata('logged_in') == null && $this->session->userdata('level') == null){
+		if($this->session->userdata('logged_in') == null && $this->session->userdata('level') != 'admin'){
 			redirect('login');
 		}
 	}
 
 	public function index(){
 		$this->parseData = [
-			'content' => 'content/dashboardView',
+			'content' => 'content/admin/dashboardView',
 			'title' => 'Halaman Dashboard'
 		];
 
@@ -27,7 +27,7 @@ class AdminController extends MY_Controller
 
 	public function pengguna(){
 		$this->parseData = [
-			'content' => 'content/admin/index',
+			'content' => 'content/admin/pengguna/index',
 			'title' => 'Halaman Pengguna'
 		];
 
@@ -104,7 +104,7 @@ class AdminController extends MY_Controller
 
 	public function satuan_barang(){
 		$this->parseData = [
-			'content' => 'content/satuan_barang/index',
+			'content' => 'content/admin/satuan_barang/index',
 			'title' => 'Halaman Satuan Barang'
 		];
 
@@ -225,16 +225,306 @@ class AdminController extends MY_Controller
 	// Method Barang hingga tanda akhir
 
 	public function barang(){
+		$satuan_barang = $this->satuan->getAll()->result();
+
 		$this->parseData = [
-			'content' => 'content/barang/index',
+			'content' => 'content/admin/barang/index',
+			'title' => 'Halaman Barang',
+			'satuan_barang' => $satuan_barang
+		];
+
+		$this->load->view('containerView', $this->parseData);
+	}
+
+	public function ajax_get_all_barang(){
+		$barang = $this->barang->getAll();
+
+		if($barang->num_rows() > 0){
+			$data = $barang->result();
+
+			foreach($data as $row){
+				$datas[] = [
+					'kode_barang' => $row->id_item,
+					'satuan_barang' => $row->unit_name,
+					'nama_barang' => $row->item_name,
+					'harga_beli' => $row->buy_price,
+					'harga_jual' => $row->sell_price,
+					'stok' => $row->stock,
+					'button' => '<a data-id="'.$row->id_item.'" data-toggle="modal" data-target="#ourModal" class="btn btn-sm btn-warning bEdit">edit</a> | <a data-id="'.$row->id_item.'" class="btn btn-sm btn-danger bDelete">delete</a>'
+				];
+			}
+
+			echo json_encode($datas);
+		} else {
+			echo json_encode($this->message('Gagal', 'Data kosong!', 'error', 0));
+		}
+	}
+
+	public function ajax_get_barang_by_id(){
+		$this->form_validation->set_rules('id', 'ID', 'required');
+
+		if($this->form_validation->run() == false) {
+			$errorMessage = '';
+			foreach($this->form_validation->error_array() as $error){
+				$errorMessage .= ' ' . $error;
+			}
+			echo json_encode($this->message('Gagal!', $errorMessage, 'error', 0));
+		} else {
+			$id = $this->input->post('id');
+			$data = $this->barang->getById($id);
+
+			if ($data->num_rows() > 0) {
+				$row = [
+					'id_item' => $data->row()->id_item,
+					'id_unit' => $data->row()->id_unit,
+					'item_name' => $data->row()->item_name,
+					'buy_price' => $data->row()->buy_price,
+					'sell_price' => $data->row()->sell_price,
+					'stock' => $data->row()->stock
+				];
+
+				echo json_encode($row);
+			}else{
+				echo json_encode($this->message('Gagal', 'Data kosong!', 'error', 0));
+			}
+		}
+	}
+
+	public function ajax_save_barang(){
+		$this->form_validation->set_rules('satuan_barang', 'Satuan Barang', 'required');
+		$this->form_validation->set_rules('kode_barang', 'Kode Barang', 'required');
+		$this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required');
+		$this->form_validation->set_rules('harga_beli', 'Harga Beli', 'required');
+		$this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
+		$this->form_validation->set_rules('stok', 'Stok', 'required');
+
+		if($this->form_validation->run() == false){
+			$errorMessage = '';
+			foreach($this->form_validation->error_array() as $error){
+				$errorMessage .= ' ' . $error;
+			}
+			echo json_encode($this->message('Gagal!', $errorMessage, 'error', 0));
+		}else{
+			$satuanBarang = $this->input->post('satuan_barang');
+			$kode_barang = $this->input->post('kode_barang');
+			$nama_barang = $this->input->post('nama_barang');
+			$harga_beli = $this->input->post('harga_beli');
+			$harga_jual = $this->input->post('harga_jual');
+			$stok = $this->input->post('stok');
+
+			$data = [
+				'id_item' => $kode_barang,
+				'id_unit' => $satuanBarang,
+				'item_name' => $nama_barang,
+				'buy_price' => $harga_beli,
+				'sell_price' => $harga_jual,
+				'stock' => $stok
+			];
+
+			if($this->barang->save($data)){
+				echo json_encode($this->message('Berhasil!', 'Data telah berhasil disimpan', 'success', 1));
+			} else {
+				echo json_encode($this->message('Gagal!', 'Data gagal disimpan, silahkan coba lagi!', 'error', 0));
+			}
+		}
+	}
+
+	public function ajax_update_barang($id){
+		$this->form_validation->set_rules('satuan_barang', 'Satuan Barang', 'required');
+		$this->form_validation->set_rules('kode_barang', 'Kode Barang', 'required');
+		$this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required');
+		$this->form_validation->set_rules('harga_beli', 'Harga Beli', 'required');
+		$this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
+		$this->form_validation->set_rules('stok', 'Stok', 'required');
+
+		if($this->form_validation->run() == false){
+			$errorMessage = '';
+			foreach($this->form_validation->error_array() as $error){
+				$errorMessage .= ' ' . $error;
+			}
+			echo json_encode($this->message('Gagal!', $errorMessage, 'error', 0));
+		}else{
+			$satuanBarang = $this->input->post('satuan_barang');
+			$kode_barang = $this->input->post('kode_barang');
+			$nama_barang = $this->input->post('nama_barang');
+			$harga_beli = $this->input->post('harga_beli');
+			$harga_jual = $this->input->post('harga_jual');
+			$stok = $this->input->post('stok');
+
+			$data = [
+				'id_item' => $kode_barang,
+				'id_unit' => $satuanBarang,
+				'item_name' => $nama_barang,
+				'buy_price' => $harga_beli,
+				'sell_price' => $harga_jual,
+				'stock' => $stok
+			];
+
+			$where = [
+				'id_item' => $id
+			];
+
+			if($this->barang->update($data, $where)){
+				echo json_encode($this->message('Berhasil!', 'Data telah berhasil disimpan', 'success', 1));
+			} else {
+				echo json_encode($this->message('Gagal!', 'Data gagal disimpan, silahkan coba lagi!', 'error', 0));
+			}
+		}
+	}
+
+	public function ajax_delete_barang($id){
+		if(!empty($id)){
+			$where = ['id_item'=>$id];
+			if($this->barang->delete($where)){
+				echo json_encode($this->message('Berhasil!', 'Data telah berhasil dihapus', 'success', 1));
+			} else {
+				echo json_encode($this->message('Gagal!', 'Data gagal dihapus, silahkan coba lagi!', 'error', 0));
+			}
+		}else{
+			echo json_encode($this->message('Gagal!', 'Data gagal dihapus, silahkan coba lagi!', 'error', 0));
+		}
+	}
+
+	// Akhir method barang
+
+	// Method Supplier hingga tanda akhir
+
+	public function supplier(){
+
+		$this->parseData = [
+			'content' => 'content/admin/supplier/index',
 			'title' => 'Halaman Barang'
 		];
 
 		$this->load->view('containerView', $this->parseData);
 	}
 
-	// Akhir method barang
+	public function ajax_get_all_supplier(){
+		$barang = $this->supplier->getAll();
 
+		if($barang->num_rows() > 0){
+			$data = $barang->result();
+
+			foreach($data as $row){
+				$datas[] = [
+					'supplier_name' => $row->supplier_name,
+					'address' => $row->address,
+					'phone' => $row->phone,
+					'button' => '<a data-id="'.$row->id_supplier.'" data-toggle="modal" data-target="#ourModal" class="btn btn-sm btn-warning bEdit">edit</a> | <a data-id="'.$row->id_supplier.'" class="btn btn-sm btn-danger bDelete">delete</a>'
+				];
+			}
+
+			echo json_encode($datas);
+		} else {
+			echo json_encode($this->message('Gagal', 'Data kosong!', 'error', 0));
+		}
+	}
+
+	public function ajax_get_supplier_by_id(){
+		$this->form_validation->set_rules('id', 'ID', 'required');
+
+		if($this->form_validation->run() == false) {
+			$errorMessage = '';
+			foreach($this->form_validation->error_array() as $error){
+				$errorMessage .= ' ' . $error;
+			}
+			echo json_encode($this->message('Gagal!', $errorMessage, 'error', 0));
+		} else {
+			$id = $this->input->post('id');
+			$data = $this->supplier->getById($id);
+
+			if ($data->num_rows() > 0) {
+				$row = [
+					'supplier_name' => $data->row()->supplier_name,
+					'address' => $data->row()->address,
+					'phone' => $data->row()->phone,
+				];
+
+				echo json_encode($row);
+			}else{
+				echo json_encode($this->message('Gagal', 'Data kosong!', 'error', 0));
+			}
+		}
+	}
+
+	public function ajax_save_supplier(){
+		$this->form_validation->set_rules('nama_supplier', 'Nama Supplier', 'required');
+		$this->form_validation->set_rules('alamat', 'Alamat', 'required');
+		$this->form_validation->set_rules('telp', 'No. Telpon', 'required');
+
+		if($this->form_validation->run() == false){
+			$errorMessage = '';
+			foreach($this->form_validation->error_array() as $error){
+				$errorMessage .= ' ' . $error;
+			}
+			echo json_encode($this->message('Gagal!', $errorMessage, 'error', 0));
+		}else{
+			$supplier_name = $this->input->post('nama_supplier');
+			$address = $this->input->post('alamat');
+			$phone = $this->input->post('telp');
+
+			$data = [
+				'supplier_name' => $supplier_name,
+				'address' => $address,
+				'phone' => $phone,
+			];
+
+			if($this->supplier->save($data)){
+				echo json_encode($this->message('Berhasil!', 'Data telah berhasil disimpan', 'success', 1));
+			} else {
+				echo json_encode($this->message('Gagal!', 'Data gagal disimpan, silahkan coba lagi!', 'error', 0));
+			}
+		}
+	}
+
+	public function ajax_update_supplier($id){
+		$this->form_validation->set_rules('nama_supplier', 'Nama Supplier', 'required');
+		$this->form_validation->set_rules('alamat', 'Alamat', 'required');
+		$this->form_validation->set_rules('telp', 'No. Telpon', 'required');
+
+		if($this->form_validation->run() == false){
+			$errorMessage = '';
+			foreach($this->form_validation->error_array() as $error){
+				$errorMessage .= ' ' . $error;
+			}
+			echo json_encode($this->message('Gagal!', $errorMessage, 'error', 0));
+		}else{
+			$supplier_name = $this->input->post('nama_supplier');
+			$address = $this->input->post('alamat');
+			$phone = $this->input->post('telp');
+
+			$data = [
+				'supplier_name' => $supplier_name,
+				'address' => $address,
+				'phone' => $phone,
+			];
+
+			$where = [
+				'id_supplier' => $id
+			];
+
+			if($this->supplier->update($data, $where)){
+				echo json_encode($this->message('Berhasil!', 'Data telah berhasil disimpan', 'success', 1));
+			} else {
+				echo json_encode($this->message('Gagal!', 'Data gagal disimpan, silahkan coba lagi!', 'error', 0));
+			}
+		}
+	}
+
+	public function ajax_delete_supplier($id){
+		if(!empty($id)){
+			$where = ['id_supplier'=>$id];
+			if($this->supplier->delete($where)){
+				echo json_encode($this->message('Berhasil!', 'Data telah berhasil dihapus', 'success', 1));
+			} else {
+				echo json_encode($this->message('Gagal!', 'Data gagal dihapus, silahkan coba lagi!', 'error', 0));
+			}
+		}else{
+			echo json_encode($this->message('Gagal!', 'Data gagal dihapus, silahkan coba lagi!', 'error', 0));
+		}
+	}
+
+	// Akhir method supplier
 }
 
 
