@@ -9,7 +9,11 @@ class AdminController extends MY_Controller
 	function __construct()
 	{
 		parent::__construct();
-		if($this->session->userdata('logged_in') == null && $this->session->userdata('level') != 'admin'){
+		if($this->session->userdata('logged_in') != null){
+			if($this->session->userdata('level') != 'admin'){
+				redirect('login');
+			}
+		}else{
 			redirect('login');
 		}
 	}
@@ -525,6 +529,93 @@ class AdminController extends MY_Controller
 	}
 
 	// Akhir method supplier
+
+	// Method list transaksi hingga tanda akhir
+
+	public function list_transaksi_barang_masuk(){
+		$list = $this->beli->getAllJoined();
+
+		$this->parseData = [
+			'content' => 'content/admin/transaksi/list/barang_masuk',
+			'title' => 'List Transaksi Barang Masuk',
+			'list' => $list
+		];
+
+		$this->load->view('containerView', $this->parseData);
+	}
+
+	public function list_transaksi_barang_keluar(){
+		$list = $this->jual->getAllJoined();
+
+		$this->parseData = [
+			'content' => 'content/admin/transaksi/list/barang_keluar',
+			'title' => 'List Transaksi Barang Keluar',
+			'list' => $list
+		];
+
+		$this->load->view('containerView', $this->parseData);
+	}
+
+	public function ajax_detail_transaksi_barang_masuk($id){
+		if(empty($id)){
+			echo json_encode($this->message('Gagal!', 'Expected Parameter ID!', 'error', 0));
+		}else{
+			$data = $this->beli->getAllDetails($id);
+
+			if($data->num_rows() > 0){
+				foreach ($data->result() as $row) {
+					$datas[] = [
+						'id_buy_item' => $row->id_buy_item,
+						'invoice_number' => $row->invoice_number,
+						'buy_date' => $row->buy_date,
+						'total' => $row->total,
+						'supplier_name' => $row->supplier_name,
+						'item_name' => $row->item_name,
+						'unit_name' => $row->unit_name,
+						'qty' => $row->qty,
+						'price' => $row->price,
+						'subtotal' => $row->subtotal
+					];
+				}
+
+				echo json_encode($datas);
+			}else{
+				echo json_encode($this->message('Gagal!', 'Data tidak ada!', 'error', 0));	
+			}
+		}
+	}
+
+	public function ajax_detail_transaksi_barang_keluar($id){
+		if(empty($id)){
+			echo json_encode($this->message('Gagal!', 'Expected Parameter ID!', 'error', 0));
+		}else{
+			$data = $this->jual->getAllDetails($id);
+
+			if($data->num_rows() > 0){
+				foreach ($data->result() as $row) {
+					$datas[] = [
+						'id_sell_item' => $row->id_sell_item,
+						'sell_date' => $row->sell_date,
+						'customer' => $row->customer,
+						'customer_payment' => $row->customer_payment,
+						'customer_change' => $row->customer_change,
+						'total' => $row->total,
+						'item_name' => $row->item_name,
+						'unit_name' => $row->unit_name,
+						'qty' => $row->qty,
+						'price' => $row->price,
+						'subtotal' => $row->subtotal
+					];
+				}
+
+				echo json_encode($datas);
+			}else{
+				echo json_encode($this->message('Gagal!', 'Data tidak ada!', 'error', 0));	
+			}
+		}
+	}
+
+	// Akhir method list transaksi
 }
 
 

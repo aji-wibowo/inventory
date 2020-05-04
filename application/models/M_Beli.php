@@ -12,6 +12,14 @@ class M_Beli extends CI_Model
 		return $query;
 	}
 
+	public function getAllJoined(){
+		return $query = $this->db->select('*')->from('buy_item')->join('supplier', 'buy_item.id_supplier=supplier.id_supplier')->get();
+	}
+
+	public function getAllDetails($id_buy){
+		return $query = $this->db->select('*')->from('buy_item_detail')->join('buy_item', 'buy_item_detail.id_buy_item=buy_item.id_buy_item')->join('supplier', 'buy_item.id_supplier=supplier.id_supplier')->join('items', 'buy_item_detail.id_item=items.id_item')->join('units', 'units.id_unit=items.id_unit')->where('buy_item_detail.id_buy_item', $id_buy)->get();
+	}
+
 	public function getAllDetail(){
 		$query = $this->db->get('buy_item_detail');
 

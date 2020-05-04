@@ -9,7 +9,11 @@ class StaffController extends MY_Controller
 	function __construct()
 	{
 		parent::__construct();
-		if($this->session->userdata('logged_in') == null && $this->session->userdata('level') != 'staff'){
+		if($this->session->userdata('logged_in') != null){
+			if($this->session->userdata('level') != 'staff'){
+				redirect('login');
+			}
+		}else{
 			redirect('login');
 		}
 	}
@@ -27,7 +31,7 @@ class StaffController extends MY_Controller
 
 	public function satuan_barang(){
 		$this->parseData = [
-			'content' => 'content/admin/satuan_barang/index',
+			'content' => 'content/staff/satuan_barang/index',
 			'title' => 'Halaman Satuan Barang'
 		];
 
@@ -151,7 +155,7 @@ class StaffController extends MY_Controller
 		$satuan_barang = $this->satuan->getAll()->result();
 
 		$this->parseData = [
-			'content' => 'content/admin/barang/index',
+			'content' => 'content/staff/barang/index',
 			'title' => 'Halaman Barang',
 			'satuan_barang' => $satuan_barang
 		];
@@ -315,7 +319,7 @@ class StaffController extends MY_Controller
 	public function supplier(){
 
 		$this->parseData = [
-			'content' => 'content/admin/supplier/index',
+			'content' => 'content/staff/supplier/index',
 			'title' => 'Halaman Barang'
 		];
 
@@ -467,6 +471,103 @@ class StaffController extends MY_Controller
 		$this->load->view('containerView', $this->parseData);
 	}
 
+	public function transaksi_barang_keluar(){
+		$kodeJual = $this->getLastIdSellItem();
+		$barang = $this->barang->getAll();
+
+		$this->parseData = [
+			'content' => 'content/staff/transaksi/barang_keluar',
+			'title' => 'Transaksi Barang Masuk',
+			'kodeJual' => $kodeJual,
+			'barang' => $barang,
+		];
+
+		$this->load->view('containerView', $this->parseData);
+	}
+
+	public function list_transaksi_barang_masuk(){
+		$list = $this->beli->getAllJoined();
+
+		$this->parseData = [
+			'content' => 'content/staff/transaksi/list/barang_masuk',
+			'title' => 'List Transaksi Barang Masuk',
+			'list' => $list
+		];
+
+		$this->load->view('containerView', $this->parseData);
+	}
+
+	public function list_transaksi_barang_keluar(){
+		$list = $this->jual->getAllJoined();
+
+		$this->parseData = [
+			'content' => 'content/staff/transaksi/list/barang_keluar',
+			'title' => 'List Transaksi Barang Keluar',
+			'list' => $list
+		];
+
+		$this->load->view('containerView', $this->parseData);
+	}
+
+	public function ajax_detail_transaksi_barang_masuk($id){
+		if(empty($id)){
+			echo json_encode($this->message('Gagal!', 'Expected Parameter ID!', 'error', 0));
+		}else{
+			$data = $this->beli->getAllDetails($id);
+
+			if($data->num_rows() > 0){
+				foreach ($data->result() as $row) {
+					$datas[] = [
+						'id_buy_item' => $row->id_buy_item,
+						'invoice_number' => $row->invoice_number,
+						'buy_date' => $row->buy_date,
+						'total' => $row->total,
+						'supplier_name' => $row->supplier_name,
+						'item_name' => $row->item_name,
+						'unit_name' => $row->unit_name,
+						'qty' => $row->qty,
+						'price' => $row->price,
+						'subtotal' => $row->subtotal
+					];
+				}
+
+				echo json_encode($datas);
+			}else{
+				echo json_encode($this->message('Gagal!', 'Data tidak ada!', 'error', 0));	
+			}
+		}
+	}
+
+	public function ajax_detail_transaksi_barang_keluar($id){
+		if(empty($id)){
+			echo json_encode($this->message('Gagal!', 'Expected Parameter ID!', 'error', 0));
+		}else{
+			$data = $this->jual->getAllDetails($id);
+
+			if($data->num_rows() > 0){
+				foreach ($data->result() as $row) {
+					$datas[] = [
+						'id_sell_item' => $row->id_sell_item,
+						'sell_date' => $row->sell_date,
+						'customer' => $row->customer,
+						'customer_payment' => $row->customer_payment,
+						'customer_change' => $row->customer_change,
+						'total' => $row->total,
+						'item_name' => $row->item_name,
+						'unit_name' => $row->unit_name,
+						'qty' => $row->qty,
+						'price' => $row->price,
+						'subtotal' => $row->subtotal
+					];
+				}
+
+				echo json_encode($datas);
+			}else{
+				echo json_encode($this->message('Gagal!', 'Data tidak ada!', 'error', 0));	
+			}
+		}
+	}
+
 	public function ajax_transaksi_barang_masuk_insert(){
 		$this->form_validation->set_rules('id_buy_item', 'ID BUY', 'required');
 		$this->form_validation->set_rules('buy_date', 'Tanggal Beli', 'required');
@@ -533,6 +634,79 @@ class StaffController extends MY_Controller
 				}else{
 					echo json_encode($this->message('Gagal!', 'Error saat simpan header, data akan di roleback!', 'error', 0));
 				}
+			}
+		}
+	}
+
+	public function ajax_transaksi_barang_keluar_insert(){
+		$this->form_validation->set_rules('id_sell_item', 'ID SELL', 'required');
+		$this->form_validation->set_rules('sell_date', 'Tanggal Jual', 'required');
+		$this->form_validation->set_rules('sell_date', 'Tanggal Jual', 'required');
+		$this->form_validation->set_rules('customer_payment', 'Bayar', 'required');
+
+		if ($this->form_validation->run() == false) {
+			$errorMessage = '';
+			foreach($this->form_validation->error_array() as $error){
+				$errorMessage .= ' ' . $error;
+			}
+			echo json_encode($this->message('Gagal!', $errorMessage, 'error', 0));		
+		}else{
+			$id_sell_item = $this->input->post('id_sell_item');
+			$sell_date = $this->input->post('sell_date');
+			$customer = $this->input->post('customer');
+			$customer_payment = $this->input->post('customer_payment');
+
+			$dataDetail = $this->temp->getByFK($id_sell_item);
+
+			if ($dataDetail->num_rows() > 0) {
+				foreach ($dataDetail->result() as $row) {
+					$simpanDetail[] = [
+						'id_sell_item' => $row->id_buy_item,
+						'id_item' => $row->id_item,
+						'qty' => $row->qty,
+						'price' => $row->price,
+						'subtotal' => $row->qty * $row->price
+					];
+				}
+
+				$grandTot = 0;
+				foreach ($simpanDetail as $s) {
+					$grandTot += $s['subtotal'];
+				}
+
+				$simpanHeader = [
+					'id_sell_item' => $id_sell_item,
+					'customer' => $customer,
+					'sell_date' => date('Y-m-d'),
+					'customer_payment' => $customer_payment,
+					'customer_change' => $customer_payment - $grandTot,
+					'total' => $grandTot
+				];
+
+				if ($this->jual->save($simpanHeader)) {
+					if ($this->jual->saveDetail($simpanDetail)) {
+						foreach ($simpanDetail as $u) {
+							$barang = $this->barang->getById($u['id_item']);
+							if($barang->num_rows() > 0){
+								$updateStock = [
+									'stock' => $barang->row()->stock - $u['qty']
+								];
+
+								$this->barang->update($updateStock, ['id_item'=>$barang->row()->id_item]);
+							}
+						}
+
+						$this->temp->removeAll();
+						echo json_encode($this->message('Berhasil!', 'Transaksi pembelian telah tersimpan', 'success', 1));
+					}else{
+						$this->jual->delete(['id_sell_item'=>$id_sell_item]);
+						echo json_encode($this->message('Gagal!', 'Error saat simpan detail, data akan di roleback!', 'error', 0));
+					}
+				}else{
+					echo json_encode($this->message('Gagal!', 'Error saat simpan header, data akan di roleback!', 'error', 0));
+				}
+			}else{
+				echo json_encode($this->message('Gagal!', 'Data yang akan anda simpan tidak ada!', 'error', 0));
 			}
 		}
 	}

@@ -32,14 +32,25 @@ $route['admin/supplier/ajax/save'] = 'AdminController/ajax_save_supplier';
 $route['admin/supplier/ajax/update/(:any)'] = 'AdminController/ajax_update_supplier/$1';
 $route['admin/supplier/ajax/delete/(:any)'] = 'AdminController/ajax_delete_supplier/$1';
 
+$route['admin/transaksi/list/masuk'] = 'AdminController/list_transaksi_barang_masuk';
+$route['admin/transaksi/ajax/masuk/detail/(:any)'] = 'AdminController/ajax_detail_transaksi_barang_masuk/$1';
+$route['admin/transaksi/list/keluar'] = 'AdminController/list_transaksi_barang_keluar';
+$route['admin/transaksi/ajax/keluar/detail/(:any)'] = 'AdminController/ajax_detail_transaksi_barang_keluar/$1';
+
 //staff
 $route['staff'] = 'StaffController/index';
 $route['staff/transaksi/masuk'] = 'StaffController/transaksi_barang_masuk';
 $route['staff/transaksi/keluar'] = 'StaffController/transaksi_barang_keluar';
 $route['staff/transaksi/masuk/insert'] = 'StaffController/ajax_transaksi_barang_masuk_insert';
+$route['staff/transaksi/keluar/insert'] = 'StaffController/ajax_transaksi_barang_keluar_insert';
 $route['staff/transaksi/insert/temporary'] = 'StaffController/ajax_transaksi_insert_temporary';
 $route['staff/transaksi/get/temporary'] = 'StaffController/ajax_transaksi_get_temporary';
 $route['staff/transaksi/delete/temporary'] = 'StaffController/ajax_transaksi_delete_temporary';
+
+$route['staff/transaksi/list/masuk'] = 'StaffController/list_transaksi_barang_masuk';
+$route['staff/transaksi/ajax/masuk/detail/(:any)'] = 'StaffController/ajax_detail_transaksi_barang_masuk/$1';
+$route['staff/transaksi/list/keluar'] = 'StaffController/list_transaksi_barang_keluar';
+$route['staff/transaksi/ajax/keluar/detail/(:any)'] = 'StaffController/ajax_detail_transaksi_barang_keluar/$1';
 
 $route['staff/satuan'] = 'StaffController/satuan_barang';
 $route['staff/satuan/ajax/get/all'] = 'StaffController/ajax_get_all_satuan';

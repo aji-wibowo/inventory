@@ -1,7 +1,7 @@
 <section class="content-header">
   <h1>
-    Transaksi Barang Masuk
-    <small>Restok Barang</small>
+    Transaksi Barang Keluar
+    <small>Penjualan Barang</small>
   </h1>
   <ol class="breadcrumb">
     <li><a href="<?= base_url('/') ?>"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -14,7 +14,7 @@
   <div class="box">
     <div class="box-header">
       <div>
-        <h4 style="float: left">Barang Masuk</h4>
+        <h4 style="float: left">Barang Keluar</h4>
         <div>
           <a href="<?= isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : base_url() ?>" id="bTambah" class="btn btn-xs btn-success" style="float: right"><i class="fa fa-arrow-left"></i> kembali</a>
         </div>
@@ -24,29 +24,18 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Kode Beli</label>
-            <input type="text" id="idBuyToDB" name="id_buy_item" class="form-control" value="<?=$kodeBeli?>" readonly>
+            <label>Kode Jual</label>
+            <input type="text" id="idSellToDB" name="id_sell_item" class="form-control" value="<?=$kodeJual?>" readonly>
           </div> 
           <div class="form-group">
-            <label>Tanggal Pembelian</label>
-            <input type="date" id="buyDataToDB" name="buy_date" class="form-control">
+            <label>Tanggal Penjualan</label>
+            <input type="text" id="sellDateToDB" name="buy_date" class="form-control" value="<?= date('d-m-Y') ?>" readonly>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label>No. Faktur</label>
-            <input type="text" name="invoice_number" id="invoiceToDB" class="form-control" placeholder="INV00000000">
-          </div>
-          <div class="form-group">
-            <label>Supplier</label>
-            <select class="form-control" name="supplier" id="supplierToDB">
-              <option value="">-Pilih Supplier-</option>
-              <?php if($supplier->num_rows() > 0){ ?>
-                <?php foreach($supplier->result() as $row){ ?>
-                  <option value="<?= $row->id_supplier ?>"><?= $row->supplier_name ?></option>
-                <?php } ?>
-              <?php } ?>
-            </select>
+            <label>Pelanggan</label>
+            <input type="text" name="customer" id="customerToDB" class="form-control">
           </div>
         </div>
       </div>
@@ -109,6 +98,26 @@
             <td colspan="6">data kosong</td>
           </tbody>
         </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label>Total</label>
+          <input type="number" id="totalToDB" name="total" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label>Uang Bayar</label>
+          <input type="number" name="customer_payment" id="customer_payment" class="form-control" placeholder="uang bayar">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label>Kembalian</label>
+          <input type="number" name="kembalian" id="kembalian" class="form-control" readonly="">
+        </div>
       </div>
     </div>
     <hr>
@@ -205,6 +214,15 @@
       }
     })
 
+    $(document).on('keyup', '#customer_payment', function(e){
+      e.preventDefault();
+
+      var total = $('#totalToDB').val();
+      var bayar = $(this).val();
+
+      $('#kembalian').val(bayar - total);
+    })
+
     $(document).on('click', '.bDeleteTemp', function(e){
       e.preventDefault();
       var id_temp = $(this).attr('data-id-temp');
@@ -243,24 +261,22 @@
 
     $('#bSubmit').click(function(e){
       e.preventDefault();
-      var id_buy_item = $('#idBuyToDB').val();
-      var buy_date = $('#buyDataToDB').val();
-      var id_supplier = $('#supplierToDB').val();
-      var invoice_number = $('#invoiceToDB').val();
+      var id_sell_item = $('#idSellToDB').val();
+      var sell_date = $('#sellDateToDB').val();
+      var customer = $('#customerToDB').val();
+      var customer_payment = $('#customer_payment').val();
 
       var data = {
-        id_buy_item : id_buy_item,
-        buy_date : buy_date,
-        id_supplier : id_supplier,
-        invoice_number : invoice_number
+        id_sell_item : id_sell_item,
+        sell_date : sell_date,
+        customer : customer,
+        customer_payment : customer_payment
       }
 
-      console.log(data);
-
       $.ajax({
-        url: '<?=base_url('staff/transaksi/masuk/insert')?>',
+        url: '<?=base_url('staff/transaksi/keluar/insert')?>',
         type: 'POST',
-        data: { id_buy_item : id_buy_item,  buy_date : buy_date, id_supplier : id_supplier, invoice_number : invoice_number},
+        data: { id_sell_item : id_sell_item,  sell_date : sell_date, customer : customer, customer_payment : customer_payment},
         success: function (data) {
           obj = $.trim(data);
           obj = $.parseJSON(obj);
@@ -275,7 +291,7 @@
     loadListBarangTemp();
 
     function loadListBarangTemp(){
-      var kode = '<?= $kodeBeli ?>';
+      var kode = '<?= $kodeJual ?>';
 
       $.ajax({
         url : '<?= base_url() ?>staff/transaksi/get/temporary',
@@ -285,11 +301,13 @@
           r = $.trim(r);
           r = $.parseJSON(r);
 
-          html = '';
+          var html = '';
+          var grandtot = 0;
 
           if(r.status != 0){
             $.each(r, function(i, item){
-              html += '<tr>'
+              grandtot += item.subtotal;
+              html += '<tr class="rownya">'
               + '<td class="idItemToDB">'+item.kode_barang+'</td>'
               + '<td>'+item.nama_barang+'</td>'
               + '<td class="qtyToDB">'+item.qty+'</td>'
@@ -298,6 +316,8 @@
               + '<td>'+item.button+'</td>'
               + '</tr>';
             });
+
+            $('#totalToDB').val(grandtot);
 
           }else{
             html = '<tr>'
