@@ -16,14 +16,40 @@ class MY_Controller extends CI_Controller
 		$this->load->model('M_Temp', 'temp');
 		$this->load->model('M_Beli', 'beli');
 		$this->load->model('M_Jual', 'jual');
-
-		// $this->temp->removeAll();
 	}
 
 	public $parseData = [
 		'content' => 'dashboard',
 		'title' => 'Dashboard'
 	];
+
+	public function grafikDashboard(){
+		$jual = $this->jual->getReport()->result_array();
+		$beli = $this->beli->getReport()->result_array();
+
+		$summaryJual = $this->jual->getSummary()->row();
+		$summaryBeli = $this->beli->getSummary()->row();
+
+		foreach ($jual as $j) {
+			$data[$j['id_item']][] = [
+				'barang' => $j['item_name'],
+				'keluar' => $j['qty']
+			];
+		}
+
+		foreach ($beli as $b) {
+			$data[$b['id_item']][] = [
+				'barang' => $b['item_name'],
+				'masuk' => $b['qty']
+			];
+		}
+		
+		foreach ($data as $row) {
+			$ready[] = array_merge($row[0], $row[1]);
+		}
+
+		return $collation = ['ready' => $ready, 'summaryJual' => $summaryJual, 'summaryBeli' => $summaryBeli];
+	}
 
 	public function message($title, $text, $icon, $status = null){
 		$message = [

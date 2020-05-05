@@ -74,7 +74,7 @@ class LoginController extends CI_Controller
 				redirect("/");
 
 			}else{
-				$this->session->set_flashdata('message', 'login gagal, silahkan coba lagi!');
+				$this->session->set_flashdata('message', 'login gagal, username atau password salah!');
 				redirect("login");
 			}
 		}else{

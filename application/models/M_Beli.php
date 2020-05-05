@@ -61,4 +61,12 @@ class M_Beli extends CI_Model
 	public function getLastID(){
 		return $this->db->select_max('id_buy_item')->where('year(buy_date)', date('Y'))->where('month(buy_date)', date('m'))->get('buy_item');
 	}
+
+	public function getReport(){
+		return $this->db->query("SELECT DISTINCT b.id_item, (SELECT item_name FROM items c WHERE c.id_item = b.id_item) item_name, SUM(subtotal) beli, count(b.id_item) qty FROM buy_item a JOIN buy_item_detail b ON a.id_buy_item=b.id_buy_item WHERE YEAR(a.buy_date) = '".date('Y')."' GROUP by b.id_item");
+	}
+
+	public function getSummary(){
+		return $this->db->query("SELECT SUM(subtotal) beli, count(b.id_item) qty FROM buy_item a JOIN buy_item_detail b ON a.id_buy_item=b.id_buy_item WHERE YEAR(a.buy_date) = '".date('Y')."'");
+	}
 }

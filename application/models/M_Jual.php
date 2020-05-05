@@ -61,4 +61,12 @@ class M_Jual extends CI_Model
 	public function getLastID(){
 		return $this->db->select_max('id_sell_item')->where('year(sell_date)', date('Y'))->where('month(sell_date)', date('m'))->get('sell_item');
 	}
+
+	public function getReport(){
+		return $this->db->query("SELECT DISTINCT b.id_item, (SELECT item_name FROM items c WHERE c.id_item = b.id_item) item_name, SUM(subtotal) jual, count(b.id_item) qty FROM sell_item a JOIN sell_item_detail b ON a.id_sell_item=b.id_sell_item WHERE YEAR(a.sell_date) = '".date('Y')."' GROUP by b.id_item");
+	}
+
+	public function getSummary(){
+		return $this->db->query("SELECT SUM(subtotal) jual, count(b.id_item) qty FROM sell_item a JOIN sell_item_detail b ON a.id_sell_item=b.id_sell_item WHERE YEAR(a.sell_date) = '".date('Y')."'");
+	}
 }

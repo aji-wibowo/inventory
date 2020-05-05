@@ -21,7 +21,8 @@ class ManagerController extends MY_Controller
 	public function index(){
 		$this->parseData = [
 			'content' => 'content/manager/dashboardView',
-			'title' => 'Halaman Dashboard'
+			'title' => 'Halaman Dashboard',
+			'grafikData' => $this->grafikDashboard()
 		];
 
 		$this->load->view('containerView', $this->parseData);
