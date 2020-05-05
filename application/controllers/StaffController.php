@@ -459,6 +459,7 @@ class StaffController extends MY_Controller
 		$supplier = $this->supplier->getAll();
 		$barang = $this->barang->getAll();
 		$kodeBeli = $this->getLastIdBuyItem();
+		$this->temp->removeAll();
 
 		$this->parseData = [
 			'content' => 'content/staff/transaksi/barang_masuk',
@@ -474,6 +475,7 @@ class StaffController extends MY_Controller
 	public function transaksi_barang_keluar(){
 		$kodeJual = $this->getLastIdSellItem();
 		$barang = $this->barang->getAll();
+		$this->temp->removeAll();
 
 		$this->parseData = [
 			'content' => 'content/staff/transaksi/barang_keluar',
@@ -527,7 +529,8 @@ class StaffController extends MY_Controller
 						'unit_name' => $row->unit_name,
 						'qty' => $row->qty,
 						'price' => $row->price,
-						'subtotal' => $row->subtotal
+						'subtotal' => $row->subtotal,
+						'fullname' => $row->fullname
 					];
 				}
 
@@ -557,7 +560,8 @@ class StaffController extends MY_Controller
 						'unit_name' => $row->unit_name,
 						'qty' => $row->qty,
 						'price' => $row->price,
-						'subtotal' => $row->subtotal
+						'subtotal' => $row->subtotal,
+						'fullname' => $row->fullname
 					];
 				}
 
@@ -609,7 +613,8 @@ class StaffController extends MY_Controller
 					'invoice_number' => $invoice_number,
 					'buy_date' => $buy_date,
 					'id_supplier' => $id_supplier,
-					'total' => $grandTot
+					'total' => $grandTot,
+					'id_user' => $this->session->userdata('id_user')
 				];
 
 				if ($this->beli->save($simpanHeader)) {
@@ -680,7 +685,8 @@ class StaffController extends MY_Controller
 					'sell_date' => date('Y-m-d'),
 					'customer_payment' => $customer_payment,
 					'customer_change' => $customer_payment - $grandTot,
-					'total' => $grandTot
+					'total' => $grandTot,
+					'id_user' => $this->session->userdata('id_user')
 				];
 
 				if ($this->jual->save($simpanHeader)) {
@@ -714,6 +720,7 @@ class StaffController extends MY_Controller
 	public function ajax_transaksi_insert_temporary(){
 		$this->form_validation->set_rules('id_item', 'Item ID', 'required');
 		$this->form_validation->set_rules('qty', 'QTY', 'required');
+		$this->form_validation->set_rules('mode', 'mode', 'required');
 
 		if($this->form_validation->run() == false){
 			$errorMessage = '';
@@ -724,12 +731,12 @@ class StaffController extends MY_Controller
 		}else{
 			$id_item = $this->input->post('id_item');
 			$qty = $this->input->post('qty');
-
+			$id_buy_item_last = $this->input->post('mode') == 'masuk' ? $this->getLastIdBuyItem() : $this->getLastIdSellItem();
 			$barang = $this->barang->getById($id_item);
 
 			if($barang->num_rows() > 0){
 				$dataTemp = [
-					'id_buy_item' => $this->getLastIdBuyItem(),
+					'id_buy_item' => $id_buy_item_last,
 					'id_item' => $id_item,
 					'qty' => $qty,
 					'price' => $barang->row()->buy_price
@@ -741,7 +748,7 @@ class StaffController extends MY_Controller
 					$qtyUpdate = $qty + $isTempExist->row()->qty;
 
 					$dataUpdate = [
-						'id_buy_item' => $this->getLastIdBuyItem(),
+						'id_buy_item' => $id_buy_item_last,
 						'qty' => $qtyUpdate,
 						'price' => $barang->row()->buy_price
 					];

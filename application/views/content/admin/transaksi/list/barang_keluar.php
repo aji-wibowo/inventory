@@ -81,6 +81,10 @@
                   <label>Tanggal Penjualan / Keluar</label>
                   <input type="text" class="form-control" id="sell_date" readonly>
                 </div>
+                <div class="form-group">
+                  <label>Staff</label>
+                  <input type="text" class="form-control" id="staff" readonly>
+                </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
@@ -156,6 +160,7 @@
               $('#total').val(addCommas(r[0].total));
               $('#customer_payment').val(addCommas(r[0].customer_payment));
               $('#customer_change').val(addCommas(r[0].customer_change));
+              $('#staff').val(addCommas(r[0].fullname));
 
               var html = '';
               $.each(r, function(i, item){

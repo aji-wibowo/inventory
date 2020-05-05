@@ -25,6 +25,7 @@ class LoginController extends CI_Controller
 			}else{
 				$setMe = [
 					"logged_in" => true,
+					"id_user" => $cekCookie->row()->id_user,
 					"username" => $cekCookie->row()->username,
 					"fullname" => $cekCookie->row()->fullname,
 					"level" => $cekCookie->row()->level,
@@ -61,6 +62,7 @@ class LoginController extends CI_Controller
 
 				$setMe = [
 					"logged_in" => true,
+					"id_user" => $isExist->row()->id_user,
 					"username" => $isExist->row()->username,
 					"fullname" => $isExist->row()->fullname,
 					"level" => $isExist->row()->level,
@@ -75,6 +77,9 @@ class LoginController extends CI_Controller
 				$this->session->set_flashdata('message', 'login gagal, silahkan coba lagi!');
 				redirect("login");
 			}
+		}else{
+			$this->session->set_flashdata('message', 'login gagal, data tidak ada! pastikan akun Anda aktif!');
+			redirect("login");
 		}
 	}
 

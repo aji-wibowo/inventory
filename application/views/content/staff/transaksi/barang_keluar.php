@@ -194,7 +194,7 @@
         $.ajax({
           url : '<?= base_url() ?>staff/transaksi/insert/temporary',
           type : 'POST',
-          data : {id_item : id_item, qty : jumlah},
+          data : {id_item : id_item, qty : jumlah, mode : 'keluar'},
           success : function(r){
             r = $.trim(r);
             r = $.parseJSON(r);

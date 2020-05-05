@@ -85,6 +85,10 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
+                  <label>Staff</label>
+                  <input type="text" class="form-control" id="staff" readonly>
+                </div>
+                <div class="form-group">
                   <label>No. Faktur</label>
                   <input type="text" class="form-control" id="invoice_number" readonly>
                 </div>
@@ -152,6 +156,7 @@
               $('#supplier').val(r[0].supplier_name);
               $('#total').val(addCommas(r[0].total));
               $('#buy_date').val(r[0].buy_date);
+              $('#staff').val(r[0].fullname);
 
               var html = '';
               $.each(r, function(i, item){

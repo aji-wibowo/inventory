@@ -233,31 +233,55 @@ $level = $this->session->userdata('level') != null ? $this->session->userdata('l
             <li><a href="<?= base_url('/staff/transaksi/keluar') ?>"><i class="fa fa-circle-o"></i> Barang Keluar</a></li>
           </ul>
         </li>
-      <?php }else{ ?>
-        <li>
-          <a href="<?= base_url('/pages/user') ?>">
-            <i class="fa fa-users"></i> <span>Users</span>
-          </a>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-sticky-note-o"></i>
-            <span>Halaman</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="<?= base_url('/pages/header') ?>"><i class="fa fa-circle-o"></i> Header</a></li>
-            <li><a href="<?= base_url('/pages/project') ?>"><i class="fa fa-circle-o"></i> Project</a></li>
-            <li><a href="<?= base_url('/pages/service') ?>"><i class="fa fa-circle-o"></i> Service</a></li>
-            <li><a href="<?= base_url('/pages/testimoni') ?>"><i class="fa fa-circle-o"></i> Testimoni</a></li>
-          </ul>
-        </li>
-      <?php } ?>
-    </ul>
-  </section>
-  <!-- /.sidebar -->
+      <?php }elseif($level == 'manager'){ ?>
+       <li>
+        <a href="<?= base_url('/manager') ?>">
+          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="<?= base_url('/manager/pengguna') ?>">
+          <i class="fa fa-archive"></i> <span>Pengguna</span>
+        </a>
+      </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-list"></i>
+          <span>Daftar Transaksi</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="<?= base_url('/manager/transaksi/list/masuk') ?>"><i class="fa fa-circle"></i> Barang Masuk</a></li>
+          <li><a href="<?= base_url('/manager/transaksi/list/keluar') ?>"><i class="fa fa-circle"></i> Barang Keluar</a></li>
+        </ul>
+      </li>
+    <?php }else{ ?>
+      <li>
+        <a href="<?= base_url('/pages/user') ?>">
+          <i class="fa fa-users"></i> <span>Users</span>
+        </a>
+      </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-sticky-note-o"></i>
+          <span>Halaman</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="<?= base_url('/pages/header') ?>"><i class="fa fa-circle-o"></i> Header</a></li>
+          <li><a href="<?= base_url('/pages/project') ?>"><i class="fa fa-circle-o"></i> Project</a></li>
+          <li><a href="<?= base_url('/pages/service') ?>"><i class="fa fa-circle-o"></i> Service</a></li>
+          <li><a href="<?= base_url('/pages/testimoni') ?>"><i class="fa fa-circle-o"></i> Testimoni</a></li>
+        </ul>
+      </li>
+    <?php } ?>
+  </ul>
+</section>
+<!-- /.sidebar -->
 </aside>
 
 <!-- Content Wrapper. Contains page content -->

@@ -12,7 +12,7 @@ class M_Users extends CI_Model
 	}
 
 	public function getByUsername($username){
-		$query = $this->db->where('username', $username)->get('users');
+		$query = $this->db->where('username', $username)->where('status', 1)->get('users');
 
 		return $query;
 	}

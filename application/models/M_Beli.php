@@ -17,7 +17,7 @@ class M_Beli extends CI_Model
 	}
 
 	public function getAllDetails($id_buy){
-		return $query = $this->db->select('*')->from('buy_item_detail')->join('buy_item', 'buy_item_detail.id_buy_item=buy_item.id_buy_item')->join('supplier', 'buy_item.id_supplier=supplier.id_supplier')->join('items', 'buy_item_detail.id_item=items.id_item')->join('units', 'units.id_unit=items.id_unit')->where('buy_item_detail.id_buy_item', $id_buy)->get();
+		return $query = $this->db->select('*')->from('buy_item_detail')->join('buy_item', 'buy_item_detail.id_buy_item=buy_item.id_buy_item')->join('supplier', 'buy_item.id_supplier=supplier.id_supplier')->join('items', 'buy_item_detail.id_item=items.id_item')->join('units', 'units.id_unit=items.id_unit')->where('buy_item_detail.id_buy_item', $id_buy)->join('users', 'users.id_user=buy_item.id_user')->get();
 	}
 
 	public function getAllDetail(){
@@ -59,6 +59,6 @@ class M_Beli extends CI_Model
 	}
 
 	public function getLastID(){
-		return $this->db->select_max('id_buy_item')->where('buy_date', date('Y-m-d'))->get('buy_item');
+		return $this->db->select_max('id_buy_item')->where('year(buy_date)', date('Y'))->where('month(buy_date)', date('m'))->get('buy_item');
 	}
 }

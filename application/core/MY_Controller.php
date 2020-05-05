@@ -17,7 +17,7 @@ class MY_Controller extends CI_Controller
 		$this->load->model('M_Beli', 'beli');
 		$this->load->model('M_Jual', 'jual');
 
-		$this->temp->removeAll();
+		// $this->temp->removeAll();
 	}
 
 	public $parseData = [

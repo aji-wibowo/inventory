@@ -73,6 +73,20 @@ $route['staff/supplier/ajax/save'] = 'StaffController/ajax_save_supplier';
 $route['staff/supplier/ajax/update/(:any)'] = 'StaffController/ajax_update_supplier/$1';
 $route['staff/supplier/ajax/delete/(:any)'] = 'StaffController/ajax_delete_supplier/$1';
 
+// Manager
+$route['manager'] = 'ManagerController/index';
+$route['manager/pengguna'] = 'ManagerController/pengguna';
+$route['manager/pengguna/ajax/get/all'] = 'ManagerController/ajax_get_all_pengguna';
+$route['manager/pengguna/ajax/save'] = 'ManagerController/ajax_save_pengguna';
+$route['manager/pengguna/ajax/update/(:num)'] = 'ManagerController/ajax_update_pengguna/$1';
+$route['manager/pengguna/ajax/get/id'] = 'ManagerController/ajax_get_pengguna_by_id';
+$route['manager/pengguna/ajax/delete/(:num)'] = 'ManagerController/ajax_delete_pengguna_by_id/$1';
+
+$route['manager/transaksi/list/masuk'] = 'ManagerController/list_transaksi_barang_masuk';
+$route['manager/transaksi/ajax/masuk/detail/(:any)'] = 'ManagerController/ajax_detail_transaksi_barang_masuk/$1';
+$route['manager/transaksi/list/keluar'] = 'ManagerController/list_transaksi_barang_keluar';
+$route['manager/transaksi/ajax/keluar/detail/(:any)'] = 'ManagerController/ajax_detail_transaksi_barang_keluar/$1';
+
 $route['default_controller'] = 'MappingController';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

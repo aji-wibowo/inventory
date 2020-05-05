@@ -138,7 +138,7 @@
         var id = $(this).attr('data-id');
 
         $.ajax({
-          url : '<?= base_url('admin/transaksi/ajax/masuk/detail/') ?>' + id,
+          url : '<?= base_url('manager/transaksi/ajax/masuk/detail/') ?>' + id,
           type : 'POST',
           success : function(r){
             r = $.trim(r);

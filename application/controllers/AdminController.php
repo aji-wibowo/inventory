@@ -574,7 +574,8 @@ class AdminController extends MY_Controller
 						'unit_name' => $row->unit_name,
 						'qty' => $row->qty,
 						'price' => $row->price,
-						'subtotal' => $row->subtotal
+						'subtotal' => $row->subtotal,
+						'fullname' => $row->fullname
 					];
 				}
 
@@ -604,7 +605,8 @@ class AdminController extends MY_Controller
 						'unit_name' => $row->unit_name,
 						'qty' => $row->qty,
 						'price' => $row->price,
-						'subtotal' => $row->subtotal
+						'subtotal' => $row->subtotal,
+						'fullname' => $row->fullname
 					];
 				}
 

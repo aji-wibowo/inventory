@@ -27,7 +27,7 @@ class M_Jual extends CI_Model
 	}
 
 	public function getAllDetails($id_sell){
-		return $query = $this->db->select('*')->from('sell_item_detail')->join('sell_item', 'sell_item_detail.id_sell_item=sell_item.id_sell_item')->join('items', 'sell_item_detail.id_item=items.id_item')->join('units', 'units.id_unit=items.id_unit')->where('sell_item_detail.id_sell_item', $id_sell)->get();
+		return $query = $this->db->select('*')->from('sell_item_detail')->join('sell_item', 'sell_item_detail.id_sell_item=sell_item.id_sell_item')->join('items', 'sell_item_detail.id_item=items.id_item')->join('units', 'units.id_unit=items.id_unit')->join('users', 'users.id_user=sell_item.id_user')->where('sell_item_detail.id_sell_item', $id_sell)->get();
 	}
 
 	public function getDetailById($id){
@@ -59,6 +59,6 @@ class M_Jual extends CI_Model
 	}
 
 	public function getLastID(){
-		return $this->db->select_max('id_sell_item')->where('sell_date', date('Y-m-d'))->get('sell_item');
+		return $this->db->select_max('id_sell_item')->where('year(sell_date)', date('Y'))->where('month(sell_date)', date('m'))->get('sell_item');
 	}
 }
