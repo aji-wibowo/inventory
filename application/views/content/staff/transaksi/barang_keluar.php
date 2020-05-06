@@ -160,7 +160,11 @@
                     <td class="buy_price"><?=$row->buy_price?></td>
                     <td class="sell_price"><?=$row->sell_price?></td>
                     <td class="stock"><?=$row->stock?></td>
-                    <td><a class="btn btn-sm btn-success bPilih" data-id="<?= $row->id_item ?>">pilih</a></td>
+                    <?php if($row->stock > 0){ ?>
+                      <td><a class="btn btn-sm btn-success bPilih" data-id="<?= $row->id_item ?>">pilih</a></td>
+                    <?php }else{ ?>
+                      <td><p>Stok Habis</p></td>
+                    <?php } ?>
                   </tr>
                 <?php } ?>
               <?php } ?>
@@ -191,26 +195,30 @@
       if(id_item == '' || jumlah == ''){
         swal("Isn't Us!", "Anda harus memilih item atau mengisi jumlah barang terlebih dahulu!", 'warning');
       }else{
-        $.ajax({
-          url : '<?= base_url() ?>staff/transaksi/insert/temporary',
-          type : 'POST',
-          data : {id_item : id_item, qty : jumlah, mode : 'keluar'},
-          success : function(r){
-            r = $.trim(r);
-            r = $.parseJSON(r);
+        if(jumlah > stockKunci || jumlah == 0){
+          swal('Gagal', 'Stok yang Anda masukan tidak cukup atau 0!!!', 'error');
+        }else{
+          $.ajax({
+            url : '<?= base_url() ?>staff/transaksi/insert/temporary',
+            type : 'POST',
+            data : {id_item : id_item, qty : jumlah, mode : 'keluar'},
+            success : function(r){
+              r = $.trim(r);
+              r = $.parseJSON(r);
 
-            if (r.status == 0) {
-              swal(r.title, r.text, r.icon);
-            }else{
-              loadListBarangTemp();
-              $('#nama_barang').val("");
-              $('#satuan').val("");
-              $('#harga').val("");
-              $('#jumlah').val("");
-              $('#id_item').val("");
+              if (r.status == 0) {
+                swal(r.title, r.text, r.icon);
+              }else{
+                loadListBarangTemp();
+                $('#nama_barang').val("");
+                $('#satuan').val("");
+                $('#harga').val("");
+                $('#jumlah').val("");
+                $('#id_item').val("");
+              }
             }
-          }
-        })
+          })
+        }
       }
     })
 
@@ -243,6 +251,8 @@
       })
     })
 
+    var stockKunci;
+
     $(document).on('click', '.bPilih', function(e){
       e.preventDefault();
 
@@ -250,6 +260,7 @@
       var item_name = $(this).parent().parent().find('.item_name').html();
       var unit_name = $(this).parent().parent().find('.unit_name').html();
       var buy_price = $(this).parent().parent().find('.buy_price').html();
+      stockKunci = $(this).parent().parent().find('.stock').html();
 
       $('#nama_barang').val(item_name);
       $('#satuan').val(unit_name);
@@ -266,6 +277,14 @@
       var customer = $('#customerToDB').val();
       var customer_payment = $('#customer_payment').val();
 
+      var kembalian  = $('#kembalian').val();
+
+      if(kembalian == '' || kembalian < 0){
+        e.preventDefault();
+        swal('Gagal', 'Pembayaran kurang!!', 'error');
+        return false;
+      }
+
       var data = {
         id_sell_item : id_sell_item,
         sell_date : sell_date,
@@ -280,9 +299,13 @@
         success: function (data) {
           obj = $.trim(data);
           obj = $.parseJSON(obj);
-          swal(obj.title, obj.text, obj.icon).then(function(){
-            window.location.reload();
-          });
+          if(obj.status == 1){
+            swal(obj.title, obj.text, obj.icon).then(function(){
+              window.location.reload();
+            });
+          }else{
+            swal(obj.title, obj.text, obj.icon);
+          }
           loadListBarangTemp();
         }
       });

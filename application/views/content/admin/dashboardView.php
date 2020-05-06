@@ -14,7 +14,7 @@
 		<div class="col-lg-3 col-xs-6">
 			<div class="small-box bg-aqua">
 				<div class="inner">
-					<h3><?= $grafikData['summaryJual']->qty ?></h3>
+					<h3><?= $grafikData['summaryJual']['qty']?></h3>
 
 					<p>Barang Keluar</p>
 				</div>
@@ -27,7 +27,7 @@
 		<div class="col-lg-3 col-xs-6">
 			<div class="small-box bg-yellow">
 				<div class="inner">
-					<h3><?= currency_format($grafikData['summaryJual']->jual) ?></h3>
+					<h3><?= currency_format($grafikData['summaryJual']['jual']) ?></h3>
 
 					<p>Hasil Barang Keluar</p>
 				</div>
@@ -40,7 +40,7 @@
 		<div class="col-lg-3 col-xs-6">
 			<div class="small-box bg-green">
 				<div class="inner">
-					<h3><?= $grafikData['summaryBeli']->qty ?></sup></h3>
+					<h3><?= $grafikData['summaryBeli']['qty']?></sup></h3>
 
 					<p>Barang Masuk</p>
 				</div>
@@ -53,7 +53,7 @@
 		<div class="col-lg-3 col-xs-6">
 			<div class="small-box bg-red">
 				<div class="inner">
-					<h3><?= currency_format($grafikData['summaryBeli']->beli) ?></h3>
+					<h3><?= currency_format($grafikData['summaryBeli']['beli']) ?></h3>
 
 					<p>Biaya Barang Masuk</p>
 				</div>

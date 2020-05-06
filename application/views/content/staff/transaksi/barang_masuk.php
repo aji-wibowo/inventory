@@ -264,9 +264,13 @@
         success: function (data) {
           obj = $.trim(data);
           obj = $.parseJSON(obj);
-          swal(obj.title, obj.text, obj.icon).then(function(){
-            window.location.reload();
-          });
+           if(obj.status == 1){
+            swal(obj.title, obj.text, obj.icon).then(function(){
+              window.location.reload();
+            });
+          }else{
+            swal(obj.title, obj.text, obj.icon);
+          }
           loadListBarangTemp();
         }
       });

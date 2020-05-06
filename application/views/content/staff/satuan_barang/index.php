@@ -133,6 +133,13 @@
       });
     })
 
+    $('#formTambahSatuanBarang').keypress(function(e){
+      if(e.keyCode == 13){
+        e.preventDefault();
+        return false;
+      }
+    });
+
     $('#bSubmit').click(function(e){
       e.preventDefault();
       var form = $('#formTambahSatuanBarang');
@@ -168,14 +175,19 @@
 
           if(r.title){
             swal(r.title, r.text, r.icon);
+            $('#tListSatuanBarang #tbody').html(html);
           }else{
 
-            $.each(r, function(i, item){
-              html += '<tr>'
-              + '<td>'+ item.unit_name +'</td>'
-              + '<td>' + item.button + '</td>'
-              + '</tr>';
-            });
+            if(r.length > 0){
+
+              $.each(r, function(i, item){
+                html += '<tr>'
+                + '<td>'+ item.unit_name +'</td>'
+                + '<td>' + item.button + '</td>'
+                + '</tr>';
+              });
+
+            }
 
             $('#tListSatuanBarang #tbody').html(html);
 

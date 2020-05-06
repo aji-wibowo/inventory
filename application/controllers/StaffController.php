@@ -641,6 +641,8 @@ class StaffController extends MY_Controller
 				}else{
 					echo json_encode($this->message('Gagal!', 'Error saat simpan header, data akan di roleback!', 'error', 0));
 				}
+			}else{
+				echo json_encode($this->message('Gagal!', 'Masukan item yang akan di restock!', 'error', 0));
 			}
 		}
 	}
@@ -648,7 +650,7 @@ class StaffController extends MY_Controller
 	public function ajax_transaksi_barang_keluar_insert(){
 		$this->form_validation->set_rules('id_sell_item', 'ID SELL', 'required');
 		$this->form_validation->set_rules('sell_date', 'Tanggal Jual', 'required');
-		$this->form_validation->set_rules('sell_date', 'Tanggal Jual', 'required');
+		$this->form_validation->set_rules('customer', 'Pelanggan', 'required');
 		$this->form_validation->set_rules('customer_payment', 'Bayar', 'required');
 
 		if ($this->form_validation->run() == false) {
@@ -735,13 +737,14 @@ class StaffController extends MY_Controller
 			$qty = $this->input->post('qty');
 			$id_buy_item_last = $this->input->post('mode') == 'masuk' ? $this->getLastIdBuyItem() : $this->getLastIdSellItem();
 			$barang = $this->barang->getById($id_item);
+			$price_barang = $this->input->post('mode') == 'masuk' ? $barang->row()->buy_price : $barang->row()->sell_price;
 
 			if($barang->num_rows() > 0){
 				$dataTemp = [
 					'id_buy_item' => $id_buy_item_last,
 					'id_item' => $id_item,
 					'qty' => $qty,
-					'price' => $barang->row()->buy_price
+					'price' => $price_barang
 				];
 
 				$isTempExist = $this->temp->getByIdItem($barang->row()->id_item);
@@ -790,20 +793,38 @@ class StaffController extends MY_Controller
 		}else{
 			$kode = $this->input->post('kode');
 			$data = $this->temp->getByFK($kode);
+			$kode2 = substr($kode, 0, 2);
 
 			if ($data->num_rows() > 0) {
-				foreach ($data->result() as $row) {
-					$barang = $this->barang->getById($row->id_item);
+				if($kode2 == 'JL'){
+					foreach ($data->result() as $row) {
+						$barang = $this->barang->getById($row->id_item);
 
-					if($barang->num_rows() > 0){
-						$datas[] = [
-							'kode_barang' => $barang->row()->id_item,
-							'nama_barang' => $barang->row()->item_name,
-							'qty' => $row->qty,
-							'harga_satuan' => $barang->row()->buy_price,
-							'subtotal' => $row->qty * $barang->row()->buy_price,
-							'button' => '<button data-id-temp="'.$row->id_buy_sell_item_temporary.'" class="btn btn-xs btn-danger bDeleteTemp"><i class="fas fa-close"> hapus</i></button>'
-						];
+						if($barang->num_rows() > 0){
+							$datas[] = [
+								'kode_barang' => $barang->row()->id_item,
+								'nama_barang' => $barang->row()->item_name,
+								'qty' => $row->qty,
+								'harga_satuan' => $barang->row()->sell_price,
+								'subtotal' => $row->qty * $barang->row()->sell_price,
+								'button' => '<button data-id-temp="'.$row->id_buy_sell_item_temporary.'" class="btn btn-xs btn-danger bDeleteTemp"><i class="fas fa-close"> hapus</i></button>'
+							];
+						}
+					}
+				}else{
+					foreach ($data->result() as $row) {
+						$barang = $this->barang->getById($row->id_item);
+
+						if($barang->num_rows() > 0){
+							$datas[] = [
+								'kode_barang' => $barang->row()->id_item,
+								'nama_barang' => $barang->row()->item_name,
+								'qty' => $row->qty,
+								'harga_satuan' => $barang->row()->buy_price,
+								'subtotal' => $row->qty * $barang->row()->buy_price,
+								'button' => '<button data-id-temp="'.$row->id_buy_sell_item_temporary.'" class="btn btn-xs btn-danger bDeleteTemp"><i class="fas fa-close"> hapus</i></button>'
+							];
+						}
 					}
 				}
 

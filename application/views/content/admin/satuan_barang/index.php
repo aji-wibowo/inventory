@@ -133,6 +133,13 @@
       });
     })
 
+    $('#formTambahSatuanBarang').keypress(function(e){
+      if(e.keyCode == 13){
+        e.preventDefault();
+        return false;
+      }
+    });
+
     $('#bSubmit').click(function(e){
       e.preventDefault();
       var form = $('#formTambahSatuanBarang');

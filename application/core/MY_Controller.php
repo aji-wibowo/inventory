@@ -27,25 +27,33 @@ class MY_Controller extends CI_Controller
 		$jual = $this->jual->getReport()->result_array();
 		$beli = $this->beli->getReport()->result_array();
 
-		$summaryJual = $this->jual->getSummary()->row();
-		$summaryBeli = $this->beli->getSummary()->row();
+		$summaryJual = $this->jual->getSummary()->row_array();
+		$summaryBeli = $this->beli->getSummary()->row_array();
 
-		foreach ($jual as $j) {
-			$data[$j['id_item']][] = [
-				'barang' => $j['item_name'],
-				'keluar' => $j['qty']
-			];
-		}
+		if(count($jual) > 0){
 
-		foreach ($beli as $b) {
-			$data[$b['id_item']][] = [
-				'barang' => $b['item_name'],
-				'masuk' => $b['qty']
-			];
-		}
-		
-		foreach ($data as $row) {
-			$ready[] = array_merge($row[0], $row[1]);
+			foreach ($jual as $j) {
+				$data[$j['id_item']][] = [
+					'barang' => $j['item_name'],
+					'keluar' => $j['qty']
+				];
+			}
+
+			foreach ($beli as $b) {
+				$data[$b['id_item']][] = [
+					'barang' => $b['item_name'],
+					'masuk' => $b['qty']
+				];
+			}
+
+			foreach ($data as $row) {
+				$ready[] = array_merge($row[0], $row[1]);
+			}
+
+		} else {
+			$ready = [];
+			$summaryJual = ['qty'=>0, 'jual'=>0];
+			$summaryBeli = ['qty'=>0, 'beli'=>0];
 		}
 
 		return $collation = ['ready' => $ready, 'summaryJual' => $summaryJual, 'summaryBeli' => $summaryBeli];
