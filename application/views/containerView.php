@@ -266,9 +266,9 @@ $level = $this->session->userdata('level') != null ? $this->session->userdata('l
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="#"><i class="fa fa-circle"></i> Barang Masuk</a></li>
-          <li><a href="#"><i class="fa fa-circle"></i> Barang Keluar</a></li>
-          <li><a href="#"><i class="fa fa-circle"></i> Stock Barang</a></li>
+          <li><a href="<?= base_url('/manager/laporan/transaksi/masuk') ?>"><i class="fa fa-circle"></i> Barang Masuk</a></li>
+          <li><a href="<?= base_url('/manager/laporan/transaksi/keluar') ?>"><i class="fa fa-circle"></i> Barang Keluar</a></li>
+          <li><a href="<?= base_url('/manager/laporan/stok/cetak') ?>"><i class="fa fa-circle"></i> Stock Barang</a></li>
         </ul>
       </li>
     <?php }else{ ?>
@@ -306,7 +306,7 @@ $level = $this->session->userdata('level') != null ? $this->session->userdata('l
 <!-- /.content-wrapper -->
 <footer class="main-footer">
   <div class="pull-right hidden-xs">
-    <b>Version</b> 2.4.18
+    <b>Version</b> 1.0.0
   </div>
   <strong>Copyright &copy; 2020 <a href="https://adminlte.io">Inventory</a>.</strong> All rights
   reserved.

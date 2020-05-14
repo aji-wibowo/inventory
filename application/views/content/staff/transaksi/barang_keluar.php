@@ -259,12 +259,12 @@
       var item_id = $(this).attr('data-id');
       var item_name = $(this).parent().parent().find('.item_name').html();
       var unit_name = $(this).parent().parent().find('.unit_name').html();
-      var buy_price = $(this).parent().parent().find('.buy_price').html();
+      var buy_price = $(this).parent().parent().find('.sell_price').html();
       stockKunci = $(this).parent().parent().find('.stock').html();
 
       $('#nama_barang').val(item_name);
       $('#satuan').val(unit_name);
-      $('#harga').val(item_name);
+      $('#harga').val(buy_price);
       $('#id_item').val(item_id);
 
       $('#ourModal').modal('hide');

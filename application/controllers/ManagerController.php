@@ -308,4 +308,164 @@ class ManagerController extends MY_Controller
 	}
 
 	// Akhir method list transaksi
+
+	// Method laporan
+
+	public function laporan_barang_masuk(){
+		$this->parseData = [
+			'content' => 'content/manager/laporan/laporanMasukView',
+			'title' => 'Laporan Barang Masuk'
+		];
+
+		$this->load->view('containerView', $this->parseData);
+	}
+
+	public function laporan_barang_keluar(){
+		$this->parseData = [
+			'content' => 'content/manager/laporan/laporanKeluarView',
+			'title' => 'Laporan Barang Keluar'
+		];
+
+		$this->load->view('containerView', $this->parseData);
+	}
+
+	public function laporan_stok_barang(){
+		$data = $this->barang->getAll();
+
+		if($data->num_rows() > 0){
+			$parseData = ['data' => $data->result()];
+
+			$this->load->library('pdf');
+
+			$this->pdf->setPaper('A4', 'potrait');
+			$this->pdf->filename = "laporan-barang-masuk.pdf";
+			$this->pdf->load_view('content/manager/laporan/laporanStokBarangCetak', $parseData);
+		} else {
+			$this->set_message_flash('Error', 'Data kosong', 'error');
+			redirect('manager');
+		}
+	}
+
+	public function laporan_barang_masuk_cetak(){
+
+		$this->form_validation->set_rules('fromDate', 'Tanggal Awal', 'required');
+		$this->form_validation->set_rules('toDate', 'Tanggal Sampai', 'required');
+
+		if ($this->form_validation->run() == true) {
+			$fromDate = $this->input->post('fromDate');
+			$toDate = $this->input->post('toDate');
+
+			$where = ['buy_date >='=>date('Y-m-d', strtotime($fromDate)), 'buy_date <='=>date('Y-m-d', strtotime($toDate))];
+
+			$data = $this->beli->getAllDetailsByWhere($where)->result();
+
+			if(count($data) > 0){
+
+				foreach ($data as $row) {
+					$dataReport[$row->id_buy_item][] = [
+						'id_item' => $row->id_item,
+						'item_name' => $row->item_name,
+						'unit_name' => $row->unit_name,
+						'qty' => $row->qty,
+						'price' => $row->price,
+						'subtotal' => $row->subtotal,
+						'total' => $row->total
+					];
+				}
+
+				$parseData = ['header' => $data, 'detail' => $dataReport];
+
+				$this->load->library('pdf');
+
+				$this->pdf->setPaper('A4', 'potrait');
+				$this->pdf->filename = "laporan-barang-masuk.pdf";
+				$this->pdf->load_view('content/manager/laporan/laporanMasukCetak', $parseData);
+			}else{
+				$this->set_message_flash('Error', 'Data kosong', 'error');
+				redirect('manager/laporan/transaksi/masuk');
+			}
+
+		} else {
+			$this->set_message_flash('Error', 'Isi form yang tertera dengan benar!', 'error');
+			$this->session->set_flashdata('coba', 'coba');
+			redirect('manager/laporan/transaksi/masuk');
+		}
+	}
+
+	public function laporan_barang_keluar_cetak(){
+
+		$this->form_validation->set_rules('fromDate', 'Tanggal Awal', 'required');
+		$this->form_validation->set_rules('toDate', 'Tanggal Sampai', 'required');
+
+		if ($this->form_validation->run() == true) {
+			$fromDate = $this->input->post('fromDate');
+			$toDate = $this->input->post('toDate');
+
+			$where = ['sell_date >='=>date('Y-m-d', strtotime($fromDate)), 'sell_date <='=>date('Y-m-d', strtotime($toDate))];
+
+			$data = $this->jual->getAllDetailsByWhere($where)->result();
+
+			if(count($data) > 0){
+
+				foreach ($data as $row) {
+					$dataReport[$row->id_sell_item][] = [
+						'id_item' => $row->id_item,
+						'item_name' => $row->item_name,
+						'unit_name' => $row->unit_name,
+						'qty' => $row->qty,
+						'price' => $row->price,
+						'subtotal' => $row->subtotal,
+						'total' => $row->total
+					];
+				}
+
+				$parseData = ['header' => $data, 'detail' => $dataReport];
+
+				$this->load->library('pdf');
+
+				$this->pdf->setPaper('A4', 'potrait');
+				$this->pdf->filename = "laporan-barang-masuk.pdf";
+				$this->pdf->load_view('content/manager/laporan/laporanKeluarCetak', $parseData);
+			}else{
+				$this->set_message_flash('Error', 'Data kosong', 'error');
+				redirect('manager/laporan/transaksi/masuk');
+			}
+
+		} else {
+			$this->set_message_flash('Error', 'Isi form yang tertera dengan benar!', 'error');
+			$this->session->set_flashdata('coba', 'coba');
+			redirect('manager/laporan/transaksi/masuk');
+		}
+	}
+
+	// Akhir method laporan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

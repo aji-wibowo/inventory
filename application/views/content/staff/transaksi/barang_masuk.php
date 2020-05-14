@@ -235,7 +235,7 @@
 
       $('#nama_barang').val(item_name);
       $('#satuan').val(unit_name);
-      $('#harga').val(item_name);
+      $('#harga').val(buy_price);
       $('#id_item').val(item_id);
 
       $('#ourModal').modal('hide');

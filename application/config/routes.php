@@ -87,6 +87,12 @@ $route['manager/transaksi/ajax/masuk/detail/(:any)'] = 'ManagerController/ajax_d
 $route['manager/transaksi/list/keluar'] = 'ManagerController/list_transaksi_barang_keluar';
 $route['manager/transaksi/ajax/keluar/detail/(:any)'] = 'ManagerController/ajax_detail_transaksi_barang_keluar/$1';
 
+$route['manager/laporan/transaksi/masuk'] = 'ManagerController/laporan_barang_masuk';
+$route['manager/laporan/transaksi/keluar'] = 'ManagerController/laporan_barang_keluar';
+$route['manager/laporan/transaksi/masuk/cetak'] = 'ManagerController/laporan_barang_masuk_cetak';
+$route['manager/laporan/transaksi/keluar/cetak'] = 'ManagerController/laporan_barang_keluar_cetak';
+$route['manager/laporan/stok/cetak'] = 'ManagerController/laporan_stok_barang';
+
 $route['default_controller'] = 'MappingController';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

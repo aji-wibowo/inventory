@@ -70,6 +70,13 @@ class MY_Controller extends CI_Controller
 		return $message;
 	}
 
+	public function set_message_flash($title, $text, $icon, $status = null){
+		$this->session->set_flashdata('status',$status);
+		$this->session->set_flashdata('title',$title);
+		$this->session->set_flashdata('text',$text);
+		$this->session->set_flashdata('icon',$icon);
+	}
+
 	public function getLastIdBuyItem(){
 		$data = $this->beli->getLastID();
 
