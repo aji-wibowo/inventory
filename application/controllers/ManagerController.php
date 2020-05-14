@@ -338,7 +338,7 @@ class ManagerController extends MY_Controller
 			$this->load->library('pdf');
 
 			$this->pdf->setPaper('A4', 'potrait');
-			$this->pdf->filename = "laporan-barang-masuk.pdf";
+			$this->pdf->filename = "laporan-stok-barang.pdf";
 			$this->pdf->load_view('content/manager/laporan/laporanStokBarangCetak', $parseData);
 		} else {
 			$this->set_message_flash('Error', 'Data kosong', 'error');
@@ -373,7 +373,7 @@ class ManagerController extends MY_Controller
 					];
 				}
 
-				$parseData = ['header' => $data, 'detail' => $dataReport];
+				$parseData = ['header' => $data, 'detail' => $dataReport, 'fromDate' => $fromDate, 'toDate' => $toDate];
 
 				$this->load->library('pdf');
 
@@ -419,12 +419,12 @@ class ManagerController extends MY_Controller
 					];
 				}
 
-				$parseData = ['header' => $data, 'detail' => $dataReport];
+				$parseData = ['header' => $data, 'detail' => $dataReport, 'fromDate' => $fromDate, 'toDate' => $toDate];
 
 				$this->load->library('pdf');
 
 				$this->pdf->setPaper('A4', 'potrait');
-				$this->pdf->filename = "laporan-barang-masuk.pdf";
+				$this->pdf->filename = "laporan-barang-keluar.pdf";
 				$this->pdf->load_view('content/manager/laporan/laporanKeluarCetak', $parseData);
 			}else{
 				$this->set_message_flash('Error', 'Data kosong', 'error');

@@ -7,6 +7,9 @@
 	<div style="text-align: center;">
 		<h3>Laporan Stok Barang</h3>
 	</div>
+	<div>
+		<label>Tanggal data : <?= date('d M Y') ?></label>
+	</div>
 	<table width="100%" border="0.1" style="text-align: left">
 		<thead>
 			<tr>
@@ -28,8 +31,8 @@
 					<td><?= currency_format($row->sell_price) ?></td>
 					<td><?= $row->stock ?></td>
 				</tr>
-			<?php $i++; } ?>
-		</tbody>
-	</table>
-</body>
-</html>
+				<?php $i++; } ?>
+			</tbody>
+		</table>
+	</body>
+	</html>

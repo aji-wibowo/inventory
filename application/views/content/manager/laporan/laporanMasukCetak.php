@@ -5,7 +5,7 @@
 </head>
 <body>
 	<div style="text-align: center;">
-		<h3>Laporan Barang Masuk Tanggal 1 Mei - 30 Mei 2020</h3>
+		<h3>Laporan Barang Masuk Tanggal <?= date('d M', strtotime($fromDate)) ?> - <?= date('d M Y', strtotime($toDate)) ?></h3>
 	</div>
 	<?php foreach($header as $h){ ?>
 		<div style="margin-top: 25px; border: 1 solid black; padding: 5px;">
