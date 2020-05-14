@@ -150,7 +150,7 @@
             r = $.trim(r);
             r = $.parseJSON(r);
 
-            if(r.status){
+            if(r.status == 0){
               swal(r.title, r.text, r.icon);
               $('#ourModal').modal('hide');
             }else{
