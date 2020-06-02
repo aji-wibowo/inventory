@@ -56,7 +56,7 @@ class LoginController extends CI_Controller
 					$data = ['cookie' => $keyCookie];
 					$where = ['id_user' => $isExist->row()->id_user];
 					if($this->user->update($data, $where)){
-						set_cookie('sunsoftware', $keyCookie, 3600*24*30);
+						set_cookie('inventory', $keyCookie, 3600*24*30);
 					}
 				}
 

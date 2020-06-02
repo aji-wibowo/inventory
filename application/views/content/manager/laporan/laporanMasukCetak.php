@@ -22,8 +22,8 @@
 				<thead>
 					<tr>
 						<th>Nama Barang</th>
-						<th>Satuan</th>
 						<th>Jumlah</th>
+						<th>Satuan</th>
 						<th>Harga</th>
 						<th>Subtotal</th>
 					</tr>
@@ -32,8 +32,8 @@
 					<?php foreach($detail[$h->id_buy_item] as $d){ ?>
 						<tr>
 							<td><?= $d['item_name'] ?></td>
-							<td><?= $d['unit_name'] ?></td>
 							<td><?= $d['qty'] ?></td>
+							<td><?= $d['unit_name'] ?></td>
 							<td><?= currency_format($d['price']) ?></td>
 							<td><?= currency_format($d['subtotal']) ?></td>
 						</tr>

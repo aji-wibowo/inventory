@@ -29,8 +29,8 @@
                   <th>ID</th>
                   <th>Nama Pelanggan</th>
                   <th>Tanggal Penjualan / Keluar</th>
-                  <th>Pelanggan Bayar</th>
-                  <th>Kembalian</th>
+                  <!-- <th>Pelanggan Bayar</th> -->
+                  <!-- <th>Kembalian</th> -->
                   <th>Total</th>
                   <th>#</th>
                 </tr>
@@ -42,8 +42,8 @@
                       <td><?= $row->id_sell_item ?></td>
                       <td><?= $row->customer ?></td>
                       <td><?= date('d-M-Y', strtotime($row->sell_date)) ?></td>
-                      <td>Rp. <?= currency_format($row->customer_payment) ?></td>
-                      <td>Rp. <?= currency_format($row->customer_change) ?></td>
+                      <!-- <td>Rp. <?= currency_format($row->customer_payment) ?></td> -->
+                      <!-- <td>Rp. <?= currency_format($row->customer_change) ?></td> -->
                       <td>Rp. <?= currency_format($row->total) ?></td>
                       <td><button data-id="<?= $row->id_sell_item ?>" data-toggle="modal" data-target="#ourModal" class="btn btn-xs btn-info bDetail"><i class="fas fa-info-circle"></i>  detail</button></td>
                     </tr>
@@ -81,19 +81,19 @@
                   <label>Tanggal Penjualan / Keluar</label>
                   <input type="text" class="form-control" id="sell_date" readonly>
                 </div>
-                 <div class="form-group">
-                  <label>Staff</label>
-                  <input type="text" class="form-control" id="staff" readonly>
-                </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group">
+               <!--  <div class="form-group">
                   <label>Pelanggan Bayar</label>
                   <input type="text" class="form-control" id="customer_payment" readonly>
                 </div>
                 <div class="form-group">
                   <label>Kembalian</label>
                   <input type="text" class="form-control" id="customer_change" readonly>
+                </div> -->
+                <div class="form-group">
+                  <label>Staff</label>
+                  <input type="text" class="form-control" id="staff" readonly>
                 </div>
                 <div class="form-group">
                   <label>Total</label>

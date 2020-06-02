@@ -225,7 +225,7 @@ class StaffController extends MY_Controller
 		$this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required');
 		$this->form_validation->set_rules('harga_beli', 'Harga Beli', 'required');
 		$this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-		$this->form_validation->set_rules('stok', 'Stok', 'required');
+		// $this->form_validation->set_rules('stok', 'Stok', 'required');
 
 		if($this->form_validation->run() == false){
 			$errorMessage = '';
@@ -239,7 +239,7 @@ class StaffController extends MY_Controller
 			$nama_barang = $this->input->post('nama_barang');
 			$harga_beli = $this->input->post('harga_beli');
 			$harga_jual = $this->input->post('harga_jual');
-			$stok = $this->input->post('stok');
+			// $stok = $this->input->post('stok');
 
 			$data = [
 				'id_item' => $kode_barang,
@@ -247,7 +247,7 @@ class StaffController extends MY_Controller
 				'item_name' => $nama_barang,
 				'buy_price' => $harga_beli,
 				'sell_price' => $harga_jual,
-				'stock' => $stok
+				// 'stock' => $stok
 			];
 
 			if($this->barang->save($data)){
@@ -264,7 +264,7 @@ class StaffController extends MY_Controller
 		$this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required');
 		$this->form_validation->set_rules('harga_beli', 'Harga Beli', 'required');
 		$this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-		$this->form_validation->set_rules('stok', 'Stok', 'required');
+		// $this->form_validation->set_rules('stok', 'Stok', 'required');
 
 		if($this->form_validation->run() == false){
 			$errorMessage = '';
@@ -278,7 +278,7 @@ class StaffController extends MY_Controller
 			$nama_barang = $this->input->post('nama_barang');
 			$harga_beli = $this->input->post('harga_beli');
 			$harga_jual = $this->input->post('harga_jual');
-			$stok = $this->input->post('stok');
+			// $stok = $this->input->post('stok');
 
 			$data = [
 				'id_item' => $kode_barang,
@@ -286,7 +286,7 @@ class StaffController extends MY_Controller
 				'item_name' => $nama_barang,
 				'buy_price' => $harga_beli,
 				'sell_price' => $harga_jual,
-				'stock' => $stok
+				// 'stock' => $stok
 			];
 
 			$where = [
@@ -651,7 +651,7 @@ class StaffController extends MY_Controller
 		$this->form_validation->set_rules('id_sell_item', 'ID SELL', 'required');
 		$this->form_validation->set_rules('sell_date', 'Tanggal Jual', 'required');
 		$this->form_validation->set_rules('customer', 'Pelanggan', 'required');
-		$this->form_validation->set_rules('customer_payment', 'Bayar', 'required');
+		// $this->form_validation->set_rules('customer_payment', 'Bayar', 'required');
 
 		if ($this->form_validation->run() == false) {
 			$errorMessage = '';
@@ -663,7 +663,7 @@ class StaffController extends MY_Controller
 			$id_sell_item = $this->input->post('id_sell_item');
 			$sell_date = $this->input->post('sell_date');
 			$customer = $this->input->post('customer');
-			$customer_payment = $this->input->post('customer_payment');
+			// $customer_payment = $this->input->post('customer_payment');
 
 			$dataDetail = $this->temp->getByFK($id_sell_item);
 
@@ -687,8 +687,8 @@ class StaffController extends MY_Controller
 					'id_sell_item' => $id_sell_item,
 					'customer' => $customer,
 					'sell_date' => date('Y-m-d'),
-					'customer_payment' => $customer_payment,
-					'customer_change' => $customer_payment - $grandTot,
+					// 'customer_payment' => $customer_payment,
+					// 'customer_change' => $customer_payment - $grandTot,
 					'total' => $grandTot,
 					'id_user' => $this->session->userdata('id_user')
 				];

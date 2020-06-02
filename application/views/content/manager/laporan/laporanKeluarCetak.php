@@ -5,7 +5,7 @@
 </head>
 <body>
 	<div style="text-align: center;">
-		<h3>Laporan Barang Masuk Tanggal <?= date('d M', strtotime($fromDate)) ?> - <?= date('d M Y', strtotime($toDate)) ?></h3>
+		<h3>Laporan Barang Keluar Tanggal <?= date('d M', strtotime($fromDate)) ?> - <?= date('d M Y', strtotime($toDate)) ?></h3>
 	</div>
 	<?php foreach($header as $h){ ?>
 		<div style="margin-top: 25px; border: 1 solid black; padding: 5px;">
@@ -22,8 +22,8 @@
 				<thead>
 					<tr>
 						<th>Nama Barang</th>
-						<th>Satuan</th>
 						<th>Jumlah</th>
+						<th>Satuan</th>
 						<th>Harga</th>
 						<th>Subtotal</th>
 					</tr>
@@ -32,8 +32,8 @@
 					<?php foreach($detail[$h->id_sell_item] as $d){ ?>
 						<tr>
 							<td><?= $d['item_name'] ?></td>
-							<td><?= $d['unit_name'] ?></td>
 							<td><?= $d['qty'] ?></td>
+							<td><?= $d['unit_name'] ?></td>
 							<td><?= currency_format($d['price']) ?></td>
 							<td><?= currency_format($d['subtotal']) ?></td>
 						</tr>
@@ -42,14 +42,14 @@
 						<td style="text-align: center; background-color: whitesmoke; font-weight: bold;" colspan="4">Total</td>
 						<td><?= currency_format($h->total) ?></td>
 					</tr>
-					<tr>
+					<!-- <tr>
 						<td style="text-align: center; background-color: whitesmoke; font-weight: bold;" colspan="4">Pelanggan Bayar</td>
 						<td><?= currency_format($h->customer_payment) ?></td>
 					</tr>
 					<tr>
 						<td style="text-align: center; background-color: whitesmoke; font-weight: bold;" colspan="4">Kembali</td>
 						<td><?= currency_format($h->customer_change) ?></td>
-					</tr>
+					</tr> -->
 				</tbody>
 			</table>
 		</div>

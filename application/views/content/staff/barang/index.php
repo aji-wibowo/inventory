@@ -1,11 +1,11 @@
 <section class="content-header">
   <h1>
-    Barang
+    Stok Barang
     <small>Kelola Data</small>
   </h1>
   <ol class="breadcrumb">
     <li><a href="<?= base_url('/') ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li class="active">Barang</li>
+    <li class="active">Stok Barang</li>
   </ol>
 </section>
 
@@ -14,7 +14,7 @@
   <div class="box">
     <div class="box-header">
       <div>
-        <h4 style="float: left">Daftar Barang</h4>
+        <h4 style="float: left">Daftar Barang dan Stok</h4>
         <div>
           <a href="#" id="bTambah" data-target="#ourModal" data-toggle="modal" class="btn btn-xs btn-success" style="float: right"><i class="fa fa-plus"></i> tambah</a>
         </div>
@@ -85,7 +85,8 @@
                   </div>
                   <div class="form-group">
                     <label for="stok">Stock</label>
-                    <input id="stok" type="number" name="stok" class="form-control">
+                    <input id="stok" type="number" name="stok" class="form-control" disabled value="0">
+                    <small>*diisi saat melakukan transaksi barang masuk oleh Admin Staff!</small>
                   </div>
                 </div>
               </div>

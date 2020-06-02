@@ -31,6 +31,10 @@ class M_Jual extends CI_Model
 	}
 
 	public function getAllDetailsByWhere($where){
+		return $query = $this->db->select('sell_item.id_sell_item,customer,customer_payment, customer_change,total,fullname,sell_date,item_name,price,qty,subtotal,unit_name, items.id_item')->from('sell_item_detail')->join('sell_item', 'sell_item_detail.id_sell_item=sell_item.id_sell_item')->join('items', 'sell_item_detail.id_item=items.id_item')->join('units', 'units.id_unit=items.id_unit')->join('users', 'users.id_user=sell_item.id_user')->where($where)->group_by('sell_item.id_sell_item')->get();
+	}
+
+	public function getAllDetailsByWhereWithoutGroup($where){
 		return $query = $this->db->select('sell_item.id_sell_item,customer,customer_payment, customer_change,total,fullname,sell_date,item_name,price,qty,subtotal,unit_name, items.id_item')->from('sell_item_detail')->join('sell_item', 'sell_item_detail.id_sell_item=sell_item.id_sell_item')->join('items', 'sell_item_detail.id_item=items.id_item')->join('units', 'units.id_unit=items.id_unit')->join('users', 'users.id_user=sell_item.id_user')->where($where)->get();
 	}
 

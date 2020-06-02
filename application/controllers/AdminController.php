@@ -301,7 +301,7 @@ class AdminController extends MY_Controller
 		$this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required');
 		$this->form_validation->set_rules('harga_beli', 'Harga Beli', 'required');
 		$this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-		$this->form_validation->set_rules('stok', 'Stok', 'required');
+		// $this->form_validation->set_rules('stok', 'Stok', 'required');
 
 		if($this->form_validation->run() == false){
 			$errorMessage = '';
@@ -315,7 +315,7 @@ class AdminController extends MY_Controller
 			$nama_barang = $this->input->post('nama_barang');
 			$harga_beli = $this->input->post('harga_beli');
 			$harga_jual = $this->input->post('harga_jual');
-			$stok = $this->input->post('stok');
+			// $stok = $this->input->post('stok');
 
 			$data = [
 				'id_item' => $kode_barang,
@@ -323,7 +323,7 @@ class AdminController extends MY_Controller
 				'item_name' => $nama_barang,
 				'buy_price' => $harga_beli,
 				'sell_price' => $harga_jual,
-				'stock' => $stok
+				// 'stock' => $stok
 			];
 
 			if($this->barang->save($data)){
@@ -340,7 +340,7 @@ class AdminController extends MY_Controller
 		$this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required');
 		$this->form_validation->set_rules('harga_beli', 'Harga Beli', 'required');
 		$this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-		$this->form_validation->set_rules('stok', 'Stok', 'required');
+		// $this->form_validation->set_rules('stok', 'Stok', 'required');
 
 		if($this->form_validation->run() == false){
 			$errorMessage = '';
@@ -354,7 +354,7 @@ class AdminController extends MY_Controller
 			$nama_barang = $this->input->post('nama_barang');
 			$harga_beli = $this->input->post('harga_beli');
 			$harga_jual = $this->input->post('harga_jual');
-			$stok = $this->input->post('stok');
+			// $stok = $this->input->post('stok');
 
 			$data = [
 				'id_item' => $kode_barang,
@@ -362,7 +362,7 @@ class AdminController extends MY_Controller
 				'item_name' => $nama_barang,
 				'buy_price' => $harga_beli,
 				'sell_price' => $harga_jual,
-				'stock' => $stok
+				// 'stock' => $stok
 			];
 
 			$where = [

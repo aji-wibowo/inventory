@@ -164,7 +164,7 @@ $level = $this->session->userdata('level') != null ? $this->session->userdata('l
           </li>
           <li>
             <a href="<?= base_url('/admin/barang') ?>">
-              <i class="fa fa-archive"></i> <span>Barang</span>
+              <i class="fa fa-archive"></i> <span>Stok Barang</span>
             </a>
           </li>
           <li>
@@ -216,21 +216,21 @@ $level = $this->session->userdata('level') != null ? $this->session->userdata('l
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-list"></i>
-                <span>Daftar Transaksi</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="<?= base_url('/staff/transaksi/list/masuk') ?>"><i class="fa fa-circle"></i> Barang Masuk</a></li>
-                <li><a href="<?= base_url('/staff/transaksi/list/keluar') ?>"><i class="fa fa-circle"></i> Barang Keluar</a></li>
-              </ul>
-            </li>
             <li><a href="<?= base_url('/staff/transaksi/masuk') ?>"><i class="fa fa-circle-o"></i> Barang Masuk</a></li>
             <li><a href="<?= base_url('/staff/transaksi/keluar') ?>"><i class="fa fa-circle-o"></i> Barang Keluar</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-list"></i>
+            <span>Riwayat Transaksi</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="<?= base_url('/staff/transaksi/list/masuk') ?>"><i class="fa fa-circle"></i> Barang Masuk</a></li>
+            <li><a href="<?= base_url('/staff/transaksi/list/keluar') ?>"><i class="fa fa-circle"></i> Barang Keluar</a></li>
           </ul>
         </li>
       <?php }elseif($level == 'manager'){ ?>

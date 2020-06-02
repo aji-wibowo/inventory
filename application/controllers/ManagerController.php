@@ -358,19 +358,24 @@ class ManagerController extends MY_Controller
 			$where = ['buy_date >='=>date('Y-m-d', strtotime($fromDate)), 'buy_date <='=>date('Y-m-d', strtotime($toDate))];
 
 			$data = $this->beli->getAllDetailsByWhere($where)->result();
+			$dataItem = $this->beli->getAllDetailsByWhereWithoutGroup($where)->result();
 
 			if(count($data) > 0){
 
 				foreach ($data as $row) {
-					$dataReport[$row->id_buy_item][] = [
-						'id_item' => $row->id_item,
-						'item_name' => $row->item_name,
-						'unit_name' => $row->unit_name,
-						'qty' => $row->qty,
-						'price' => $row->price,
-						'subtotal' => $row->subtotal,
-						'total' => $row->total
-					];
+					foreach ($dataItem as $rw) {
+						if($row->id_buy_item == $rw->id_buy_item){	
+							$dataReport[$rw->id_buy_item][] = [
+								'id_item' => $rw->id_item,
+								'item_name' => $rw->item_name,
+								'unit_name' => $rw->unit_name,
+								'qty' => $rw->qty,
+								'price' => $rw->price,
+								'subtotal' => $rw->subtotal,
+								'total' => $rw->total
+							];
+						}
+					}
 				}
 
 				$parseData = ['header' => $data, 'detail' => $dataReport, 'fromDate' => $fromDate, 'toDate' => $toDate];
@@ -404,19 +409,24 @@ class ManagerController extends MY_Controller
 			$where = ['sell_date >='=>date('Y-m-d', strtotime($fromDate)), 'sell_date <='=>date('Y-m-d', strtotime($toDate))];
 
 			$data = $this->jual->getAllDetailsByWhere($where)->result();
+			$dataItem = $this->jual->getAllDetailsByWhereWithoutGroup($where)->result();
 
 			if(count($data) > 0){
 
 				foreach ($data as $row) {
-					$dataReport[$row->id_sell_item][] = [
-						'id_item' => $row->id_item,
-						'item_name' => $row->item_name,
-						'unit_name' => $row->unit_name,
-						'qty' => $row->qty,
-						'price' => $row->price,
-						'subtotal' => $row->subtotal,
-						'total' => $row->total
-					];
+					foreach ($dataItem as $rw) {
+						if($row->id_sell_item == $rw->id_sell_item){
+							$dataReport[$rw->id_sell_item][] = [
+								'id_item' => $rw->id_item,
+								'item_name' => $rw->item_name,
+								'unit_name' => $rw->unit_name,
+								'qty' => $rw->qty,
+								'price' => $rw->price,
+								'subtotal' => $rw->subtotal,
+								'total' => $rw->total
+							];
+						}
+					}
 				}
 
 				$parseData = ['header' => $data, 'detail' => $dataReport, 'fromDate' => $fromDate, 'toDate' => $toDate];

@@ -56,14 +56,14 @@
         </div>
         <div class="col-md-2">
           <div class="form-group">
-            <label>Satuan</label>
-            <input type="text" id="satuan" class="form-control" readonly>
+            <label>Jumlah</label>
+            <input type="number" id="jumlah" class="form-control">
           </div>
         </div>
         <div class="col-md-2">
           <div class="form-group">
-            <label>Jumlah</label>
-            <input type="number" id="jumlah" class="form-control">
+            <label>Satuan</label>
+            <input type="text" id="satuan" class="form-control" readonly>
           </div>
         </div>
         <div class="col-md-3">
@@ -101,13 +101,13 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-12">
         <div class="form-group">
           <label>Total</label>
           <input type="number" id="totalToDB" name="total" class="form-control" readonly>
         </div>
       </div>
-      <div class="col-md-4">
+     <!--  <div class="col-md-4">
         <div class="form-group">
           <label>Uang Bayar</label>
           <input type="number" name="customer_payment" id="customer_payment" class="form-control" placeholder="uang bayar">
@@ -118,7 +118,7 @@
           <label>Kembalian</label>
           <input type="number" name="kembalian" id="kembalian" class="form-control" readonly="">
         </div>
-      </div>
+      </div> -->
     </div>
     <hr>
     <div class="row">
@@ -222,14 +222,14 @@
       }
     })
 
-    $(document).on('keyup', '#customer_payment', function(e){
-      e.preventDefault();
+    // $(document).on('keyup', '#customer_payment', function(e){
+    //   e.preventDefault();
 
-      var total = $('#totalToDB').val();
-      var bayar = $(this).val();
+    //   var total = $('#totalToDB').val();
+    //   var bayar = $(this).val();
 
-      $('#kembalian').val(bayar - total);
-    })
+    //   $('#kembalian').val(bayar - total);
+    // })
 
     $(document).on('click', '.bDeleteTemp', function(e){
       e.preventDefault();
@@ -275,27 +275,28 @@
       var id_sell_item = $('#idSellToDB').val();
       var sell_date = $('#sellDateToDB').val();
       var customer = $('#customerToDB').val();
-      var customer_payment = $('#customer_payment').val();
+      // var customer_payment = $('#customer_payment').val();
 
-      var kembalian  = $('#kembalian').val();
+      // var kembalian  = $('#kembalian').val();
 
-      if(kembalian == '' || kembalian < 0){
-        e.preventDefault();
-        swal('Gagal', 'Pembayaran kurang!!', 'error');
-        return false;
-      }
+      // if(kembalian == '' || kembalian < 0){
+      //   e.preventDefault();
+      //   swal('Gagal', 'Pembayaran kurang!!', 'error');
+      //   return false;
+      // }
 
       var data = {
         id_sell_item : id_sell_item,
         sell_date : sell_date,
         customer : customer,
-        customer_payment : customer_payment
+        // customer_payment : customer_payment
       }
 
       $.ajax({
         url: '<?=base_url('staff/transaksi/keluar/insert')?>',
         type: 'POST',
-        data: { id_sell_item : id_sell_item,  sell_date : sell_date, customer : customer, customer_payment : customer_payment},
+        // data: { id_sell_item : id_sell_item,  sell_date : sell_date, customer : customer, customer_payment : customer_payment},
+        data: { id_sell_item : id_sell_item,  sell_date : sell_date, customer : customer},
         success: function (data) {
           obj = $.trim(data);
           obj = $.parseJSON(obj);

@@ -40,7 +40,7 @@ class Pdf extends Dompdf
         // Render the PDF
     	$this->render();
             // Output the generated PDF to Browser
-    	$this->stream($this->filename, array("Attachment" => true));
+    	$this->stream($this->filename, array("Attachment" => false));
     }
 
 }
